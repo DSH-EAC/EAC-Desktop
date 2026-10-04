@@ -328,7 +328,8 @@ export function ensureEacEnvironment(
     storageRoot,
     registryHome,
     platform,
-    inherited: env,
+    // JSON serialization loses Windows process.env's case-insensitive lookup.
+    inherited: platform === 'win32' ? { ...env, PATH: env.PATH ?? env.Path } : env,
   }) as Partial<DpxBootstrapResult>;
 
   if (!result.record || !result.paths || !result.runtime) {

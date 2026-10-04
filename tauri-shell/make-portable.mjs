@@ -7,6 +7,7 @@
 //   sidecar/{server,bridge,rescue-integration}.js
 //   dsh-desktop/<完整运行树>
 //   ui-skin-manager/<皮肤管理器资源>
+//   dpx/<pinned runtime isolation API>
 //
 // 用法：node make-portable.mjs [--out <dir>]
 //   前置：tauri build 已完成（target/release/{dsh-eac-shell.exe, sidecar/, dsh-desktop/}）。
@@ -27,7 +28,7 @@ const outArg = process.argv.indexOf('--out');
 const outDir = outArg > -1 ? path.resolve(process.argv[outArg + 1]) : path.join(rel, 'portable');
 
 const exe = path.join(rel, 'dsh-eac-shell.exe');
-for (const need of [exe, path.join(rel, 'sidecar', 'server.js'), path.join(rel, 'dsh-desktop', 'package.json'), path.join(rel, 'ui-skin-manager', 'resolved', 'system.default', 'snapshot.json')]) {
+for (const need of [exe, path.join(rel, 'sidecar', 'server.js'), path.join(rel, 'dsh-desktop', 'package.json'), path.join(rel, 'ui-skin-manager', 'resolved', 'system.default', 'snapshot.json'), path.join(rel, 'dpx', 'src', 'index.js')]) {
   if (!existsSync(need)) {
     console.error('[portable] 缺少构建产物: ' + need);
     console.error('[portable] 请先完成 tauri build（或 node stage-resources.mjs 后 cargo tauri build）');
@@ -71,6 +72,7 @@ console.log('[portable] 复制 sidecar + dsh-desktop + ui-skin-manager（数万�
 robocopy(path.join(rel, 'sidecar'), path.join(staging, 'sidecar'));
 robocopy(path.join(rel, 'dsh-desktop'), path.join(staging, 'dsh-desktop'));
 robocopy(path.join(rel, 'ui-skin-manager'), path.join(staging, 'ui-skin-manager'));
+robocopy(path.join(rel, 'dpx'), path.join(staging, 'dpx'));
 
 console.log('[portable] 压缩 zip（Compress-Archive，约 500MB 需几分钟）');
 const psZip = [
