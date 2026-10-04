@@ -16,6 +16,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { spawnSync } from 'node:child_process';
 
 const require = createRequire(import.meta.url);
 const environment = require('../lib/desktop/environment.js') as {
@@ -317,6 +318,18 @@ test('B: 真实 dpx API —— 创建环境、可复用、marker 与产品数据
   assert.equal(again.rootExistedBefore, true);
   const instance = again.record.instance as { instanceId?: string } | undefined;
   assert.equal(typeof instance?.instanceId, 'string', 'dpx 记录的 instance.instanceId 应存在');
+});
+
+test('B: Windows Path casing preserves system command lookup after isolation', { skip: HOST_PLATFORM !== 'win32' || !dpxAvailable }, () => {
+  const env = isolatedEnv(tempRoot('path-case'));
+  const inheritedPath = process.env.PATH;
+  assert.ok(inheritedPath);
+  delete env.PATH;
+  env.Path = inheritedPath;
+  const ensured = environment.ensureEacEnvironment(env, HOST_PLATFORM);
+  assert.ok(ensured.runtime.PATH?.endsWith(`;${inheritedPath}`));
+  const result = spawnSync('taskkill', ['/?'], { env: ensured.runtime, windowsHide: true, encoding: 'utf8' });
+  assert.equal(result.status, 0, result.error?.message || result.stderr);
 });
 
 test('B: 注册表损坏时 fail closed（不静默重建、不丢用户数据）', { skip: !dpxAvailable && 'third_party/dsh-dpx submodule 未初始化' }, () => {
