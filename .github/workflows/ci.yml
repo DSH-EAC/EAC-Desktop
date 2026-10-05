@@ -1,10 +1,8 @@
 name: Minimal core CI
 
 on:
-  pull_request:
-    branches:
-      - dev
-      - main
+  # PR 自动触发已停用（DSH-EAC 组织决定）：CI 只由 push 与手动 workflow_dispatch 触发。
+  # 安装包打包（staged-runtime-artifact.yml）仍由下方 packages job 在手动触发时调用。
   push:
     branches:
       - dev
