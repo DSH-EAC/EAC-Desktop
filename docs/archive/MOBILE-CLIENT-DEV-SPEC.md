@@ -1,6 +1,6 @@
 # DSH Desktop 手机续聊客户端 · 实现开发文档
 
-> 适用仓库：`zouyuxuan122/Deepseek-Harness-EAC`（本地工程根 `dsh_desktop`，内核 `@deepseek-ai/dsh@0.1.1-rc.2`）
+> 适用仓库：`Ebony-Vinyl/Deepseek-Harness-EAC`（本地工程根 `dsh_desktop`，内核 `@deepseek-ai/dsh@0.1.1-rc.2`）
 > 版本批次：5.1.0 修复批次（内部代号 5.1.1）的后续功能；本批已交付「连接手机」桌面侧配对链路 + 白名单 RPC 桥 + 手机端**开发中占位页**。本文档指导把手机端占位页升级为**可用的续聊客户端**。
 > 状态：2026-08-27 调研定稿（接口契约均为本仓库内核实测，非臆测）。
 

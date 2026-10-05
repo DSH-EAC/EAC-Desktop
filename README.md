@@ -6,7 +6,7 @@
 
 [中文](README.md) | [English](README.en.md)
 
-[![Stars](https://img.shields.io/github/stars/zouyuxuan122/Deepseek-Harness-EAC?style=for-the-badge&label=%E2%AD%90Star&color=08C&link=https://github.com/zouyuxuan122/Deepseek-Harness-EAC)](https://github.com/zouyuxuan122/Deepseek-Harness-EAC) [![MIT License](https://img.shields.io/badge/license-MIT-2EA44F?style=for-the-badge&link=https://github.com/zouyuxuan122/Deepseek-Harness-EAC/blob/main/LICENSE)](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/Ebony-Vinyl/Deepseek-Harness-EAC?style=for-the-badge&label=%E2%AD%90Star&color=08C&link=https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC)](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC) [![MIT License](https://img.shields.io/badge/license-MIT-2EA44F?style=for-the-badge&link=https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/blob/main/LICENSE)](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/blob/main/LICENSE)
 
 [![QQ](https://img.shields.io/badge/QQ-1083832019-blue?style=plastic&logo=qq&logoSize=auto&link=https://qm.qq.com/q/vqXxQQ3rmo)](https://qm.qq.com/q/vqXxQQ3rmo) [![Discord](https://img.shields.io/badge/DISCORD-DSH--EAC-blue?style=plastic&logo=discord&logoSize=auto&link=https://discord.com/invite/kY48Ah8h)](https://discord.com/invite/kY48Ah8h)
 
@@ -14,7 +14,7 @@
 
 <div align="center">
 
-**🚀 全新产品：[Deepseek Harness EAC IDE](https://github.com/zouyuxuan122/Deepseek-Harness-EAC-IDE) —— 内置 EAC 的独立 IDE · 开箱即用 · [前往下载 →](https://github.com/zouyuxuan122/Deepseek-Harness-EAC-IDE/releases)**
+**🚀 全新产品：[Deepseek Harness EAC IDE](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE) —— 内置 EAC 的独立 IDE · 开箱即用 · [前往下载 →](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE/releases)**
 
 封装了官方[deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)，**开箱即用的桌面客户端**。
 在其之上拥抱社区万象：皮肤、插件、工具、记忆——**你所能想到的，一切皆可装**。
@@ -36,7 +36,7 @@
 > 
 > 为本项目的多实例与插件玩法而生：每个实例独立程序目录与 `DSH_HOME`，从上游 Release 一键安装任意版本，装插件崩了也能一键回滚。
 > 
-> 👉 **[zouyuxuan122/DSH-EAC-Launcher](https://github.com/zouyuxuan122/DSH-EAC-Launcher)** ｜ [⬇ 下载最新版 v1.1.0](https://github.com/zouyuxuan122/DSH-EAC-Launcher/releases/latest)
+> 👉 **[Ebony-Vinyl/DSH-EAC-Launcher](https://github.com/Ebony-Vinyl/DSH-EAC-Launcher)** ｜ [⬇ 下载最新版 v1.1.0](https://github.com/Ebony-Vinyl/DSH-EAC-Launcher/releases/latest)
 
 ## 目录
 
@@ -87,10 +87,10 @@
 
 | 文件                                                                                                                                     | 说明                                                                                                                           | 大小      |
 | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------- |
-| [安装版 Setup（v5.3.6）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-Setup-x64.exe) | Tauri 壳安装版（NSIS），安装到系统并创建快捷方式；SHA256 校验文件随 [Release](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/tag/v5.3.6) 提供 | ~191 MB |
-| [便携版（v5.3.6）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-portable.zip)        | 免安装压缩包，解压到任意目录即可运行；数据跟随程序目录，可直接迁移                                                                                            | ~228 MB |
+| [安装版 Setup（v5.3.6）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-Setup-x64.exe) | Tauri 壳安装版（NSIS），安装到系统并创建快捷方式；SHA256 校验文件随 [Release](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/tag/v5.3.6) 提供 | ~191 MB |
+| [便携版（v5.3.6）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-portable.zip)        | 免安装压缩包，解压到任意目录即可运行；数据跟随程序目录，可直接迁移                                                                                            | ~228 MB |
 
-更多版本见 [Releases 页面](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases)。
+更多版本见 [Releases 页面](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases)。
 
 ### AIO 版（Windows x64 · All-in-One）
 
@@ -98,9 +98,9 @@
 
 | 文件                                                                                                                                       | 说明                                                       | 大小      |
 | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- | ------- |
-| [AIO 安装版（v1.2.0）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Setup-x64.exe)          | NSIS 安装版，安装到系统并创建快捷方式；EXE 为 `DSHEAC AIO.exe`，与正式版更新器互相隔离 | ~313 MB |
-| [AIO 便携版（v1.2.0）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Portable-x64.zip)       | 免安装解压即用，数据写入 EXE 同级 `.dsh-aio-data`，可直接迁移                | ~147 MB |
-| [校验清单 SHA256SUMS-AIO-v1.2.0.txt](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/aio-v1.2.0/SHA256SUMS-AIO-v1.2.0.txt) | AIO 资产 SHA-256 校验                                        | —       |
+| [AIO 安装版（v1.2.0）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Setup-x64.exe)          | NSIS 安装版，安装到系统并创建快捷方式；EXE 为 `DSHEAC AIO.exe`，与正式版更新器互相隔离 | ~313 MB |
+| [AIO 便携版（v1.2.0）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Portable-x64.zip)       | 免安装解压即用，数据写入 EXE 同级 `.dsh-aio-data`，可直接迁移                | ~147 MB |
+| [校验清单 SHA256SUMS-AIO-v1.2.0.txt](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/SHA256SUMS-AIO-v1.2.0.txt) | AIO 资产 SHA-256 校验                                        | —       |
 
 - 安装包尚未 Authenticode 签名，SmartScreen 可能提示未知发布者；运行前请先核对 SHA-256。
 - 客户端自更新不在 AIO 中提供，插件自动更新默认关闭；安装路径建议不超过 120 个字符。
@@ -115,13 +115,13 @@
 
 ### macOS（Apple Silicon / arm64）
 
-> macOS 桌面版与 Windows/Linux 同源同版本，随 [v5.1.0 Release](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/tag/v5.1.0) 一同发布。
+> macOS 桌面版与 Windows/Linux 同源同版本，随 [v5.1.0 Release](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/tag/v5.1.0) 一同发布。
 
 | 文件                                                                                                                                           | 说明                   | 大小      |
 | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- | ------- |
-| [安装镜像 .dmg](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg)        | 双击挂载后拖入 Applications | ~136 MB |
-| [应用包 .app.zip](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | 解压后直接运行              | ~157 MB |
-| [校验和 SHA256SUMS-macos.txt](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v5.1.0/SHA256SUMS-macos.txt)               | macOS 资产 SHA256      | —       |
+| [安装镜像 .dmg](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg)        | 双击挂载后拖入 Applications | ~136 MB |
+| [应用包 .app.zip](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | 解压后直接运行              | ~157 MB |
+| [校验和 SHA256SUMS-macos.txt](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/SHA256SUMS-macos.txt)               | macOS 资产 SHA256      | —       |
 
 - 桌面配置目录：`~/Library/Application Support/deepseek-harness-eac/`；dsh 数据仍在 `~/.dsh`（与 CLI 共享，会话互通）。
 - 未签名、未公证（个人自用定位）：首次打开若被 Gatekeeper 拦截，右键 →「打开」。
@@ -133,10 +133,10 @@
 
 | 文件                                                                                                                                                 | 说明                   |
 | -------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| [.deb（Debian/Ubuntu，v5.3.6）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb)        | 安装后可从应用菜单启动          |
-| [AppImage（v5.3.6）](https://github.com/zouyuxuan122/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage)             | 免安装：`chmod +x` 后直接运行 |
-| [.rpm（Fedora/openSUSE）](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0.x86_64.rpm) | —                    |
-| [.pacman（Arch）](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0-x64.pacman)         | —                    |
+| [.deb（Debian/Ubuntu，v5.3.6）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb)        | 安装后可从应用菜单启动          |
+| [AppImage（v5.3.6）](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage)             | 免安装：`chmod +x` 后直接运行 |
+| [.rpm（Fedora/openSUSE）](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0.x86_64.rpm) | —                    |
+| [.pacman（Arch）](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0-x64.pacman)         | —                    |
 
 - 依赖：Tauri 2 + webkit2gtk-4.1（debian 系安装 `libwebkit2gtk-4.1-dev` 等构建依赖见仓库 CI）；AppImage 自带运行时，构建基线 Ubuntu 22.04。
 - 桌面配置目录：`~/.config/deepseek-harness-eac`（XDG）；dsh 数据仍在 `~/.dsh`（与 CLI 共享）。
@@ -435,11 +435,11 @@ research/                     # 第三方微信/桥接协议调研资料
 
 感谢每一位贡献者：
 
-特别致谢 [@CharlesAQ](https://github.com/CharlesAQ) —— macOS 桌面移植（[PR #234](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/pull/234)）：Tauri 壳 darwin 分支、平台适配层、darwin 资源装配与裁剪、`.app`/`.dmg` 打包配置，让 EAC 首次跑上 Apple Silicon。
+特别致谢 [@CharlesAQ](https://github.com/CharlesAQ) —— macOS 桌面移植（[PR #234](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/pull/234)）：Tauri 壳 darwin 分支、平台适配层、darwin 资源装配与裁剪、`.app`/`.dmg` 打包配置，让 EAC 首次跑上 Apple Silicon。
 
 <p align="center">
-  <a href="https://github.com/zouyuxuan122/Deepseek-Harness-EAC/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=zouyuxuan122/Deepseek-Harness-EAC" />
+  <a href="https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=Ebony-Vinyl/Deepseek-Harness-EAC" />
   </a>
 </p>
 
@@ -447,11 +447,11 @@ research/                     # 第三方微信/桥接协议调研资料
 
 ## Star 趋势
 
-<a href="https://www.star-history.com/?repos=zouyuxuan122%2FDeepseek-Harness-EAC&type=date&legend=bottom-right">
+<a href="https://www.star-history.com/?repos=Ebony-Vinyl%2FDeepseek-Harness-EAC&type=date&legend=bottom-right">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=zouyuxuan122/Deepseek-Harness-EAC&type=date&theme=dark&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=zouyuxuan122/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=zouyuxuan122/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&theme=dark&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
  </picture>
 </a>
 

@@ -4405,7 +4405,7 @@ fn main() {
                 }
                 "feedback" => {
                     tauri::async_runtime::spawn(async move {
-                        if let Err(error) = open_external("https://github.com/zouyuxuan122/Deepseek-Harness-EAC/issues").await {
+                        if let Err(error) = open_external("https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/issues").await {
                             eprintln!("[tray] open feedback failed: {}", error);
                         }
                     });

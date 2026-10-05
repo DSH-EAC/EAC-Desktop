@@ -32,9 +32,9 @@
 
 ## 快速开始（成品用户）
 
-1. 打开 [Releases](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/latest) 页面，下载最新版（v5.1.0，Tauri 重构壳）：
-   - [Deepseek.Harness.EAC_5.1.0_x64-setup.exe](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_x64-setup.exe) —— 安装版，创建桌面/开始菜单快捷方式
-   - [Deepseek-Harness-EAC-5.1.0-portable.zip](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek-Harness-EAC-5.1.0-portable.zip) —— 免安装便携版，解压后运行 `dsh-eac-shell.exe`
+1. 打开 [Releases](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/latest) 页面，下载最新版（v5.1.0，Tauri 重构壳）：
+   - [Deepseek.Harness.EAC_5.1.0_x64-setup.exe](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_x64-setup.exe) —— 安装版，创建桌面/开始菜单快捷方式
+   - [Deepseek-Harness-EAC-5.1.0-portable.zip](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek-Harness-EAC-5.1.0-portable.zip) —— 免安装便携版，解压后运行 `dsh-eac-shell.exe`
 2. 首次运行会显示启动动画，随后进入 DeepSeek Harness Web UI。
 3. 如尚未配置 API Key，在界面内完成配置即可开始使用（与命令行 dsh 完全一致）。
 

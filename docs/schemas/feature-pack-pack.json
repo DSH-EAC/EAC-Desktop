@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/zouyuxuan122/Deepseek-Harness-EAC/blob/main/docs/schemas/feature-pack-pack.json",
+  "$id": "https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/blob/main/docs/schemas/feature-pack-pack.json",
   "title": "EAC 功能包清单（pack.json）",
   "description": ".dshpack 归档内 pack.json 的契约（事实源：docs/feature-pack-spec.md；两者不一致时以本 schema 为准并修文档）。",
   "type": "object",

@@ -38,7 +38,7 @@
 桌面集成层**。内核（@deepseek-ai/dsh）与「万物皆插件」体系零改动。
 
 - 官方内核仓库：`https://github.com/deepseek-ai/deepseek-harness`（TS 97.1%，npm 包仅为编译产物）
-- 本项目仓库：`https://github.com/zouyuxuan122/Deepseek-Harness-EAC`
+- 本项目仓库：`https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC`
 - 本机代码根：`D:\DeepSeek Harness\dsh max\dsh_desktop\dsh-desktop`（下称 `<root>`）
 
 ---

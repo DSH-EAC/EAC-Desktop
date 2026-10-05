@@ -12,7 +12,7 @@
 | 项 | 现状 |
 | --- | --- |
 | 项目定位 | DeepSeek Harness Desktop（dsh-desktop）：官方 `@deepseek-ai/dsh` 内核的 Windows / Linux 桌面客户端，EAC = Embracing All Creation（揽尽万象） |
-| 仓库 | `https://github.com/zouyuxuan122/Deepseek-Harness-EAC` |
+| 仓库 | `https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC` |
 | 本机代码根 | `D:\DeepSeek Harness\dsh max\dsh_desktop\dsh-desktop`（下称 `<root>`） |
 | 当前版本 | v4.6.0 已发布；`next`（统一插件市场三源合一）已合入 main |
 | 测试基线 | 73 个测试文件 / 608 用例全绿（`npm test`，约 60s） |

@@ -175,7 +175,7 @@ jobs:
 
           ### 🧑‍💻 macOS 桌面支持贡献
           - 移植作者：[@CharlesAQ](https://github.com/CharlesAQ)
-          - 实现：PR [#234](https://github.com/zouyuxuan122/Deepseek-Harness-EAC/pull/234)（macos-port，AppleScript 转义 / pbcopy / ditto 诊断包 / darwin 资源装配与裁剪 / .app/.dmg 打包配置），已合并进 main
+          - 实现：PR [#234](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/pull/234)（macos-port，AppleScript 转义 / pbcopy / ditto 诊断包 / darwin 资源装配与裁剪 / .app/.dmg 打包配置），已合并进 main
           - 本发布随该 PR 合并上线；能力矩阵与实现规格见 PR 正文与 `docs/superpowers/specs/2026-08-27-macos-desktop-support-design.md`
 
           ### 验证（GitHub Actions macos-14 全链路实测通过）
