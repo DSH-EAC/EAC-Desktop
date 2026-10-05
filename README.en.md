@@ -1,412 +1,322 @@
 <div align="center">
 
-<h1><img src="docs/assets/EAC-Desktop.svg" alt="Deepseek Harness EAC — Embracing All Creation" width="808" /></h1>
+<h1><img src="docs/assets/eac-readme-hero.svg" alt="EAC-Desktop" width="808" /></h1>
 
 **_EAC = Embracing All Creation（揽尽万象）_**
 
 [中文](README.md) | [English](README.en.md)
 
-[![Stars](https://img.shields.io/github/stars/Ebony-Vinyl/Deepseek-Harness-EAC?style=for-the-badge&label=%E2%AD%90Star&color=08C&link=https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC)](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC) [![MIT License](https://img.shields.io/badge/license-MIT-2EA44F?style=for-the-badge&link=https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/blob/main/LICENSE)](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/blob/main/LICENSE)
+[![Stars](https://img.shields.io/github/stars/DSH-EAC/EAC-Desktop?style=for-the-badge&label=Star&color=4b6fff)](https://github.com/DSH-EAC/EAC-Desktop)
+[![MIT License](https://img.shields.io/badge/license-MIT-2ea44f?style=for-the-badge)](LICENSE)
 
-[![QQ](https://img.shields.io/badge/QQ-1083832019-blue?style=plastic&logo=qq&logoSize=auto&link=https://qm.qq.com/q/vqXxQQ3rmo)](https://qm.qq.com/q/vqXxQQ3rmo) [![Discord](https://img.shields.io/badge/DISCORD-DSH--EAC-blue?style=plastic&logo=discord&logoSize=auto&link=https://discord.com/invite/kY48Ah8h)](https://discord.com/invite/kY48Ah8h)
+[![QQ](https://img.shields.io/badge/QQ-1083832019-blue?logo=qq)](https://qm.qq.com/q/vqXxQQ3rmo)
+[![Discord](https://img.shields.io/badge/Discord-DSH--EAC-5865f2?logo=discord)](https://discord.com/invite/kY48Ah8h)
 
-[![DSH-EAC/EAC-Desktop | Trendshift daily](https://trendshift.io/api/badge/trendshift/repositories/158075/daily?language=JavaScript)](https://trendshift.io/repositories/158075) [![DSH-EAC/EAC-Desktop | Trendshift weekly](https://trendshift.io/api/badge/trendshift/repositories/158075/weekly?language=JavaScript)](https://trendshift.io/repositories/158075)
+[![Trendshift daily](https://trendshift.io/api/badge/trendshift/repositories/158075/daily?language=JavaScript)](https://trendshift.io/repositories/158075)
+[![Trendshift weekly](https://trendshift.io/api/badge/trendshift/repositories/158075/weekly?language=JavaScript)](https://trendshift.io/repositories/158075)
+
+[Download](https://github.com/DSH-EAC/EAC-Desktop/releases) · [Quick start](#quick-start) · [Architecture](#architecture) · [Community](#community-and-support)
 
 </div>
 
-> [!IMPORTANT]
-> 
-> This project is undergoing a major refactor. 
-> 
-> The remaining bugs in v5 will no longer be fixed. We will release v6 as soon as possible to fully replace v5's functionality.
-> 
-> Please stay tuned.
+**Turn agent capabilities into a desktop built for real work.**
 
-> [!NOTE]
-> 
-> The following is the README for v5.
+Deepseek Harness EAC is an open-source desktop workspace built on [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness). It brings conversations, project files, tool execution and extensions together, with native windows, separate runtime environments and bundled dependencies to get you from installation to work.
+
+**EAC · Embracing All Creation.** Open capabilities, clear boundaries: the shell owns the desktop experience, the service layer owns orchestration, Harness owns the agent, and extension packages open up new possibilities.
+
+<p align="center"><img src="docs/screenshot-preview.jpg" alt="EAC desktop skin preview" width="960" /><br /><sub>Skin showcase · appearance depends on the installed skin.</sub></p>
+
+## Contents
+
+| Get started | Architecture & extensions | Development & community |
+| :--- | :--- | :--- |
+| [Capabilities](#capabilities)<br />[Quick start](#quick-start)<br />[Download and launch](#download-and-launch)<br />[Data and environments](#data-and-environments) | [Architecture](#architecture)<br />[From launch to execution](#from-launch-to-execution)<br />[Keep complexity within explicit boundaries](#keep-complexity-within-explicit-boundaries)<br />[Plugins and appearance](#plugins-and-appearance)<br />[Desktop companion capabilities](#desktop-companion-capabilities)<br />[Extension distribution](#extension-distribution)<br />[Skin contracts](#skin-contracts) | [Development](#development)<br />[Repository map](#repository-map)<br />[Documentation and community](#documentation-and-community)<br />[Community and support](#community-and-support)<br />[Contributors and acknowledgements](#contributors-and-acknowledgements)<br />[License and acknowledgements](#license-and-acknowledgements)<br />[Star history](#star-history) |
+
+## Capabilities
+
+| From intent to action | What EAC provides |
+| --- | --- |
+| Start working | Bundled Node.js, npm and dsh resources launch the local Web UI without a separate Node installation |
+| Collaborate around a project | Run tasks in a workspace, inspect session file changes, and review or restore edits through the file view |
+| Manage long conversations | Request-path context compaction and bounded overflow recovery manage context space |
+| Shape your workflow | Quick-setup controls for vision models and persona-related settings |
+| Keep extensions manageable | Aggregated catalogs, installation and activation controls, plus protection-center snapshots, health checks and rollback |
+| Separate environments | DPX manages environment identity, default data paths and runtime variables by release channel |
+| Work as a desktop app | Tauri native windows, tray, single-instance behavior and exit policies with managed service lifecycles |
+| Customize appearance | User skins arrive through market packages and integrate through explicit host contracts |
+
+Model requests use your configured provider. Activation, compatibility and additional dependencies depend on the distribution package and extension configuration.
+
+## Quick start
+
+### Download and launch
+
+Latest stable Windows release: **v6.0.0**. Other platforms link to the most recent published package for each listed format.
+
+| Platform | Version | Download | Updated (UTC+8) |
+| --- | --- | --- | --- |
+| Windows x64 | v6.0.0 | [Full Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-Setup-x64.exe) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Full Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-x64-portable.zip) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Lite Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-Setup-x64.exe) | 2026-10-05 00:49 |
+| Windows x64 | v6.0.0 | [Lite Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-x64-portable.zip) | 2026-10-05 00:49 |
+| Linux x64 | v5.3.6 | [AppImage](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage) | 2026-09-03 19:30 |
+| Linux x64 | v5.3.6 | [deb](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb) | 2026-09-03 19:30 |
+| Linux x64 | v4.4.0-linux | [rpm](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0.x86_64.rpm) | 2026-08-19 19:13 |
+| macOS arm64 | v5.1.0 | [dmg](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg) | 2026-08-27 15:12 |
+| macOS arm64 | v5.1.0 | [app.zip](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | 2026-08-27 15:12 |
+
+[Release notes](https://github.com/DSH-EAC/EAC-Desktop/releases/tag/v6.0.0) · [SHA256SUMS.txt](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/SHA256SUMS.txt)
+
+Update times are GitHub asset update timestamps. Platform packages may belong to different release generations; consult their release notes before installation. Windows uses WebView2; cloud models require network access and provider credentials.
+
+1. **Launch the application** and wait for the local dsh service and Web UI.
+2. **Configure your model**, including provider and API key.
+3. **Select a workspace**, describe a task, and let the agent work in project context.
+4. **Review the result** through conversation output and file-change views.
+5. **Extend as needed** with plugins suited to your workflow.
+
+<details>
+<summary>Verify a download</summary>
+
+Compute the file hash in PowerShell and compare it with the checksum manifest from the same release:
+
+```powershell
+Get-FileHash -LiteralPath '<downloaded-file-path>' -Algorithm SHA256
+```
+
+</details>
+
+## Architecture
+
+**One desktop entry point. Three distinct responsibilities.** EAC separates operating-system integration, runtime orchestration and the agent kernel so that desktop experience and extensions can evolve independently.
+
+![EAC architecture: Tauri drives the Node sidecar through RPC; DPX prepares the runtime environment for services and the official dsh kernel](docs/assets/eac-runtime-flow-en.svg)
+
+| Layer | Responsibility | Entry point |
+| --- | --- | --- |
+| **L1 · Native desktop** | Windows, tray, single instance, exit policy and native integration | [Rust shell](tauri-shell/src/main.rs) |
+| **L2 · Orchestration** | Environment initialization, profiles, process startup, desktop RPC, plugin synchronization and management | [Node sidecar](tauri-shell/sidecar/server.ts), [desktop services](dsh-desktop/lib/desktop) |
+| **L3 · Harness kernel** | Agent execution, conversations, tools, Cordis plugin tree and Web UI | [Kernel dependencies](dsh-desktop/package.json) |
+| **DPX · Environment infrastructure** | Registration, directory layout, default paths and runtime variables | [Environment adapter](dsh-desktop/lib/desktop/environment.ts), [dsh-dpx](third_party/dsh-dpx) |
+
+### From launch to execution
+
+1. **The shell locates resources and starts the sidecar**, passing the product data root and channel.
+2. **DPX creates or reuses an environment**, applying runtime variables before user configuration and plugin modules are read.
+3. **The service layer prepares the profile and companion plugins**, launches dsh, and waits for readiness.
+4. **The main window opens the Web UI**. Harness handles conversations and tool execution; desktop operations reach the host through the bridge.
+
+Rust and Node communicate over **stdio JSON-RPC**, keeping protocol output separate from diagnostics. Environment initialization failures stop startup and report the error instead of continuing under the wrong data root.
+
+### Keep complexity within explicit boundaries
+
+- **Separate native integration from business services.** Native capabilities belong in L1, orchestration in L2, and extensions connect through plugin contracts.
+- **Reuse established environment management.** DPX owns registry state, identity and default paths; EAC calls it through an adapter instead of maintaining a second rule set.
+- **Make distribution explicit.** Plugin directories, synchronization manifests and dependency artifacts define the package, exposing missing resources during staging.
+- **Pin interface resources.** UI skin manager and default-shell artifacts are locked and checked with SHA-256 during assembly.
+
+Read the decisions on [layering](docs/adr/0002-shell-boundary-and-layering.md), [environment isolation](docs/adr/0004-eac-install-environment-isolation.md), and [core scope](docs/adr/0006-minimal-core-scope.md).
+
+## Plugins and appearance
+
+### Desktop companion capabilities
+
+Companion plugins use Harness host/client contracts. The [staging script](tauri-shell/stage-resources.mjs) assembles these modules:
+
+| Area | Plugins | Purpose |
+| --- | --- | --- |
+| File collaboration | `dsh-file-changes`, `dsh-client-file-changes` | Session change projection, file-change views and restore controls |
+| Context management | `dsh-compact` | Request-path compaction and bounded overflow recovery |
+| Quick setup | `dsh-easy-setup` | Vision-model, persona and related configuration |
+| Discovery | `dsh-unified-market` | Aggregated catalogs and installation management |
+| Protection | `dsh-plugin-shield` | Snapshots, health checks and rollback controls |
+| Localization | `dsh-eac-locale-compat` | English UI compatibility for companion and community plugins |
+| UI stability | `dsh-viewport-lock`, `dsh-settings-scroll-fix` | Viewport constraints and settings-panel wheel/overflow fixes |
+
+### Extension distribution
+
+Plugins are classified as **builtin / recommended / external**. Assembly manifests define bundled capabilities; package metadata defines recommended collections and external extensions. Choose extensions for their functionality, and manage them by source, version constraints and license.
+
+Explore the [distribution specification](docs/adr/0008-plugin-distribution-boundary.md), [plugin ledger](.sync/plugin-distribution.json), and [source records](dsh-desktop/assets/SOURCES.json).
+
+### Skin contracts
+
+User Web UI skins are installed through market packages; without an activated skin, the host uses its native appearance. The shell's UI skin manager and `system.default` resources are pinned by the [artifact lock](tauri-shell/skin-manager-artifact.lock.json). Regions, slots and exposed capabilities are defined in the [host profile](tauri-shell/host-profile.json).
+
+**Skins own presentation; the host owns capabilities and window boundaries.** Explicit contracts reduce coupling between visual customization and business logic.
+
+## Data and environments
+
+EAC organizes desktop data in **separate DPX environments**, using the `web-desktop` profile. Environments are named `eac-<channel>`: the same channel reuses its environment, while different channels have separate storage.
+
+```text
+<product-data-root>/
+└── dpx/dsh-environments/eac-<channel>/
+    ├── .dpx-environment.json      # environment identity
+    ├── dsh-home/                 # profiles, sessions, skills and configuration
+    ├── home/                     # environment user directory
+    ├── appdata/                  # application data
+    ├── localappdata/             # local application data
+    ├── tmp/                      # temporary files
+    └── workspace/                # environment workspace
+```
+
+Windows defaults to `%LOCALAPPDATA%\Deepseek Harness EAC`; other platforms derive their system data directory. Host `~/.dsh` is detected and reported, not automatically migrated, deleted or overwritten.
+
+Quit the application before backing up the actual product data root and separate project directories. Portable describes the application distribution format; environment configuration determines where data lives.
+
+DPX redirects default paths and environment variables; **it does not provide filesystem sandboxing**. Operating-system permissions still govern access to explicit absolute paths. See [environment.ts](dsh-desktop/lib/desktop/environment.ts).
+
+## Development
+
+### Repository map
+
+```text
+tauri-shell/       Rust shell, sidecar, bridge, resource staging and packaging
+dsh-desktop/       TypeScript services, companion plugins, build scripts and tests
+third_party/       External dependencies pinned to commits
+.sync/             Plugin source, distribution and synchronization ledgers
+docs/adr/          Architecture decisions and module boundaries
+```
+
+The packaging matrix covers Windows/Linux x64 and arm64; the repository also includes macOS platform configuration. Get binaries from Releases and consult the [installer workflow](.github/workflows/staged-runtime-artifact.yml) for source builds.
+
+<details>
+<summary>Prepare the source and toolchain</summary>
+
+Use Git, Node.js 24, pnpm 11.7.0 and Rust stable. Windows needs C++ build tools for the Rust target; Linux needs Tauri/WebKitGTK dependencies.
+
+```sh
+git clone --recurse-submodules https://github.com/says693/Deepseek-Harness-EAC.git
+cd Deepseek-Harness-EAC
+git submodule update --init --recursive
+node tauri-shell/check-dpx-pin.mjs
+npm install --global pnpm@11.7.0
+
+cd dsh-desktop
+node scripts/fetch-kernel.js
+npm run ci:install
+npm run typecheck
+npm run build
+npm run fetch-runtime
+npm test
+cd ..
+```
+
+Kernel dependencies use local `vendor/kernel` artifacts. Fetch the pinned kernel before installing dependencies. Building downloads dependencies from the network.
+
+</details>
+
+<details>
+<summary>Stage and package</summary>
+
+For Windows, from the repository root:
+
+```sh
+node tauri-shell/stage-resources.mjs --target=win32 --skip-npm
+node dsh-desktop/scripts/verify-staged-runtime.mjs
+cd tauri-shell
+cargo fetch --locked
+npx -y @tauri-apps/cli@2 build --verbose
+```
+
+For Linux, use `--target=linux` and set `APPIMAGE_EXTRACT_AND_RUN=1` during the build. Ubuntu build dependencies:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf libfuse2 rpm
+```
+
+For portable archives, see [make-portable.mjs](tauri-shell/make-portable.mjs).
+
+</details>
+
+<details>
+<summary>Validation and contributions</summary>
+
+Run type checks, tests and ledger checks from `dsh-desktop`:
+
+```sh
+npm run typecheck
+npm test
+node scripts/plugin-ledger.mjs
+node scripts/plugin-sync.mjs validate
+```
+
+Startup, bridge, environment and packaging changes also require relevant runtime validation. Choose checks using the [development guide](.agents/skills/deepseek-harness-eac-dev/SKILL.md) and follow [CONTRIBUTING.md](CONTRIBUTING.md).
+
+</details>
+
+## Documentation and community
+
+- [Architecture decisions](docs/adr): layering, isolation, skins and plugin distribution.
+- [Issues](https://github.com/DSH-EAC/EAC-Desktop/issues): reproducible bugs, feature proposals and feedback.
+- [Contribute](https://github.com/DSH-EAC/EAC-Desktop/pulls): code, extension compatibility, platform support and documentation.
+- [Contributors](https://github.com/DSH-EAC/EAC-Desktop/graphs/contributors): the people building EAC.
+- [Ecosystem credits](docs/ECOSYSTEM-CREDITS.md): plugin authors, skin sources and license records.
+
+Include the application version, operating system, package format, reproduction steps and redacted logs in bug reports to help trace environment and runtime behavior.
+
+## Community and support
+
+Discuss workflows, plugins and troubleshooting with the community.
+
+| QQ | Discord | Issue tracker |
+| :---: | :---: | :---: |
+| [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) | [DSH-EAC](https://discord.com/invite/kY48Ah8h) | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
+
+<table><tr><td align="center"><img src="docs/qq-group-qrcode.jpg" alt="QQ group QR code" width="260" /></td><td align="center"><img src="docs/wechat-group-qrcode.jpg" alt="WeChat group QR code" width="260" /></td></tr><tr><td align="center">QQ · 1083832019</td><td align="center">WeChat group</td></tr></table>
+
+## Contributors and acknowledgements
+
+Thank you to the developers who contribute code, platform support, plugins and documentation to EAC.
 
 <div align="center">
 
-**🚀 New Product: [Deepseek Harness EAC IDE](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE) —— Independent IDE with built-in EAC · Out of the Box · [Download →](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE/releases)**
-
-Wraps the official [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness), providing an **out-of-the-box desktop client**.  
-On top of it, embrace the community's universe: skins, plugins, tools, memory—anything you can imagine, **everything is installable**.
-
-![Deepseek-Desktop-EAC UI preview](docs/screenshot-preview.jpg)
-
----
-
-## Table of Contents
-
-- [Why EAC](#why-eac)
-- [Quick Start](#quick-start)
-- [Features](#features)
-- [Community & Support](#community--support)
-- [Developer Documentation](#developer-documentation)
-- [Acknowledgements](#acknowledgements)
-- [Star History](#star-history)
-- [License](#license)
-
----
-
-## Why EAC
-
-| Area                    | Official DeepSeek Harness default experience                                       | Deepseek Harness EAC enhancements                                                                                     |
-| ----------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| Installation and launch | Requires a separately installed Node.js environment and CLI startup                | Bundles Node.js, the npm CLI, and dsh; provides setup and portable builds that launch with a double-click             |
-| Desktop experience      | Primarily used from a terminal or browser                                          | Native desktop window, system tray, shortcut maintenance, process cleanup, and task notifications                     |
-| CLI coexistence         | CLI and Web normally use the same plugin environment                               | Uses a separate `web-desktop` profile while sharing sessions and API keys with the CLI, keeping plugins isolated      |
-| Plugin reliability      | Plugins are generally installed through a package manager and troubleshot manually | Takes snapshots before installation and startup, with health checks, repair, retry, rollback, and incident reports    |
-| Interface customization | Uses the official interface by default                                             | Includes 10 skins plus font, size, color, and mobile layout customization                                             |
-| Project tools           | Relies on external editors and terminals                                           | Includes a file tree, line-level diffs, one-click restore, persistent terminal, and HTML/local-port previews          |
-| Context and personas    | `/compact` and persona files are managed manually                                  | Supports automatic compaction, persona cards, and hot-reloading for `soul.md`                                         |
-| Models and MCP          | Primarily managed through configuration files or the CLI                           | Provides visual configuration for vision models and MCP, plus imports from Claude Code and Codex                      |
-| Plugin ecosystem        | Plugins are installed through the CLI or package manager                           | Includes a plugin marketplace with search, one-click installation, removal, and management                            |
-| Conversation efficiency | Uses the standard conversation workflow                                            | Adds temporary side conversations, conversation-node navigation, and reasoning-effort controls for third-party models |
-| Messaging integration   | Does not include EAC messaging bridges by default                                  | Connects to WeChat ClawBot / OpenClaw in one click                                                                    |
-| Updates and maintenance | Updated through a package manager or manually                                      | Checks dsh agent and desktop-client updates separately, preserving or rolling back the previous version on failure    |
-
-> EAC does not modify the official dsh core, preserving its plugin architecture and official capabilities in full.
-> It shares sessions and API keys from `DSH_HOME` by default while isolating the desktop plugin environment.
-
----
-
-## Quick Start
-
-### Requirements
-
-- Windows 10/11 (x64)
-- macOS 13+ (Apple Silicon / arm64; desktop edition)
-- No pre-installed Node.js or other runtime required
-
-### Windows
-
-> The current release line is 5.x (Tauri/Rust shell). Since 5.2 the desktop builds share a unified Tauri shell; the earlier v4.4.1 Electron edition is retired (archived in Releases only). Download installers directly from Releases.
-
-| File                                                                                                                                      | Description                                                                                                                                                                                          | Size    |
-| ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| [Setup (v5.3.6)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-Setup-x64.exe)       | Tauri shell setup build (NSIS): installs to the system and creates shortcuts; SHA256 checksums are published with the [release](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/tag/v5.3.6) | ~191 MB |
-| [Portable zip (v5.3.6)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek-Harness-EAC-5.3.6-portable.zip) | No installation required: unzip anywhere and run; portable data stays next to the program directory for easy migration                                                                               | ~228 MB |
-
-See the [Releases page](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases) for more versions.
-
-### AIO Edition (Windows x64 · All-in-One)
-
-> **DSHEAC AIO** is an **All-in-One polished personal terminal** maintained on a line separate from the 5.x mainline: a single package bundling the dsh kernel, the plugin marketplace, and the full desktop experience, ready out of the box. It is isolated from the main edition (separate app data and `dsh-home`; it never reads 5.x / v4Lite / legacy EAC or CLI data by default) and can be installed side by side. Current version: **AIO v1.2.0** (source branch `aio-v1`, published together with the [aio-v1.2.0 release](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/tag/aio-v1.2.0)).
-
-| File                                                                                                                                     | Description                                                                                                                                            | Size    |
-| ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| [AIO setup (v1.2.0)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Setup-x64.exe)       | NSIS setup build that installs to the system and creates shortcuts; the executable is `DSHEAC AIO.exe`, fully isolated from the main edition's updater | ~313 MB |
-| [AIO portable (v1.2.0)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/DSHEAC-AIO-v1.2.0-Portable-x64.zip) | No installation required: unzip and run; data is written to `.dsh-aio-data` next to the EXE and migrates with it                                       | ~147 MB |
-| [SHA256SUMS-AIO-v1.2.0.txt](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/aio-v1.2.0/SHA256SUMS-AIO-v1.2.0.txt)      | SHA-256 checksums for the AIO assets                                                                                                                   | —       |
-
-- The AIO installer is not yet Authenticode-signed; SmartScreen may warn about an unknown publisher. Verify the SHA-256 checksum before running.
-- Client self-update is not offered in the AIO edition and plugin auto-update is off by default; keep the installation path under 120 characters.
-- **Highlights of v1.2.0**: kernel aligned with the official desktop `0.1.3-alpha.2`, plugin interfaces migrated to the new kernel APIs, app icon switched to WhaleGirl, and confirmed-retired plugins/skins removed.
-- **AIO upgrade note**: when upgrading from an older AIO install, only sessions and provider settings are carried over; plugins from the old install are not inherited (built-in plugins ship with the package).
-
-> 💡 **Upgrading**: just download and run the newest installer above over your existing install.
-> Plugins, skins, sessions and settings are preserved: data lives in
-> `%APPDATA%\Deepseek Harness EAC\` and `~/.dsh`, untouched by the upgrade.
-
-### macOS (Apple Silicon / arm64)
-
-> The macOS desktop build shares the same version and codebase as Windows/Linux and is published under the same [v5.1.0 Release](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/tag/v5.1.0).
-
-| File                                                                                                                                                | Description                      | Size    |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- | ------- |
-| [Disk image .dmg](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg)         | Mount and drag into Applications | ~136 MB |
-| [App bundle .app.zip](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | Unzip and run directly           | ~157 MB |
-| [SHA256SUMS-macos.txt](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v5.1.0/SHA256SUMS-macos.txt)                          | macOS asset checksums            | —       |
-
-- Desktop config directory: `~/Library/Application Support/deepseek-harness-eac/`; dsh data stays in `~/.dsh` (shared with the CLI).
-- Unsigned and not notarized (personal use): if Gatekeeper blocks the first launch, right-click → Open.
-- Client self-update is disabled in the macOS v1 build (no macOS assets upstream yet); dsh agent (kernel) updates are fully retained.
-
-### Linux (x64 / arm64)
-
-> The Linux desktop build is continuously built and verified by CI (Ubuntu 22.04). The v6 Linux build now produces AppImage, .deb, and .rpm together; after a formal Release is published, use that version's Release assets for downloads.
-
-| File                                                                                                                                                | Description                             |
-| --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| [.deb (Debian/Ubuntu, v5.3.6)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb)       | Installs and launches from the app menu |
-| [AppImage (v5.3.6)](https://github.com/Ebony-Vinyl/DSH-Desktop-EAC/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage)             | No installation: `chmod +x` and run     |
-| `.rpm` (Fedora/openSUSE) | CI artifact `dsh-eac-linux-x64-installers` / `dsh-eac-linux-arm64-installers` or the matching Release asset |
-| [.pacman (Arch)](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0-x64.pacman)         | —                                       |
-
-- Dependencies: Tauri 2 with webkit2gtk-4.1 (Debian-family build deps such as `libwebkit2gtk-4.1-dev` mirror the repo CI); the AppImage bundles its own runtime, built against an Ubuntu 22.04 baseline.
-- Desktop config directory: `~/.config/deepseek-harness-eac` (XDG); dsh data stays in `~/.dsh` (shared with the CLI).
-- System integration (clipboard via `wl-copy`/`xclip`/`xsel`, notifications via `notify-send`) depends on your desktop environment; when missing, the capability honestly degrades to "external-dependency" rather than pretending to work.
-
-### First Run
-
-1. Launch the app. After the startup animation, the DeepSeek Harness Web UI loads automatically in a native window and is accessible only through the local loopback interface.
-2. If you have not configured an API key, open Settings and complete the setup before starting. The configuration is identical to the dsh CLI.
-3. Common entry points: Settings → Skins (10 built-in skins) / Plugin Marketplace / one-click model selection; conversation area → Terminal / Files tabs.
-
-### Data Directories
-
-> Portable data is stored in `data\` next to the exe; the setup build uses `%APPDATA%\Deepseek Harness EAC\`.
-> To override the dsh configuration directory, set the `DSH_HOME` environment variable before launch, just as you would with the dsh CLI.
-
-### Updating
-
-- **Desktop client**: checks upstream releases automatically after launch, with fallback release sources. After your approval, it downloads and installs the update. The portable build replaces itself and restarts; the setup build opens the new installer. The current version is preserved if the update fails.
-- **Official agent (dsh)**: detects new `@deepseek-ai/dsh` versions and, after approval, installs them into a data-directory overlay with an atomic switch. If the new version fails to start, you can roll back to the bundled version in one click.
-- You can also download and run the latest package above without losing data. Since v2.0, the installer closes running old and new instances before uninstalling, preventing the "Failed to uninstall old application files" error during an in-place upgrade.
-
----
-
-## Features
-
-### Out-of-the-box Desktop Experience
-
-- **Bundled runtime**: includes Node.js, the npm CLI, `@deepseek-ai/dsh`, and official plugins, with no additional runtime installation required.
-- **Setup and portable builds**: launch with a double-click and automatically select a free port; portable data stays with the application directory for easy migration.
-- **Desktop integration**: provides a native window, system tray, shortcut maintenance, process cleanup, and task-completion notifications.
-- **CLI coexistence**: shares sessions and API keys from `DSH_HOME` while using a separate `web-desktop` profile so desktop and CLI plugins do not interfere with each other.
-- **Automatic updates**: updates the dsh agent and desktop client separately, preserving or restoring the previous version if installation fails.
-
-### Development Workflow
-
-- **File tree and previews**: browse project files and preview HTML files or local-port services inside the app.
-- **Change tracking and restore**: inspect session file changes and line-level diffs, then restore individual files or all changes at once.
-- **In-session terminal**: use persistent PowerShell in the project directory with streaming output, command history, and automatic reconnection.
-- **Conversation navigation**: jump quickly between user messages.
-- **Temporary conversations**: ask follow-up questions from the current context in a separate floating window without affecting the main conversation.
-
-### Conversations & Models
-
-- **Automatic compaction**: runs `/compact` as the context approaches its limit, with a configurable threshold and silent retry on failure.
-- **Persona management**: includes six persona cards with save, apply, delete, live editing, and `soul.md` hot-reload support.
-- **Image understanding**: uses `picturereader` to analyze local or online images and return the result directly to the conversation.
-- **MCP and quick setup**: visually manages MCP and imports skills, MCP configuration, and memory from Claude Code or Codex.
-- **Third-party model controls**: adjusts reasoning effort for supported third-party models.
-- **DeepSeek balance**: displays the current-turn cost and account balance, with top-up access and automatic refresh.
-
-### Plugins & Reliability
-
-- **Unified plugin marketplace**: `dsh-unified-market` aggregates multiple plugin sources with search, one-click installation, and removal.
-- **Plugin Protection Center**: `dsh-plugin-shield`, together with the built-in `plugin-guard` engine, provides snapshots, health checks, repair, retry, rollback, and incident reports.
-- **Self-healing reliability**: automatically handles profile-module shadowing, plugin startup failures, and file-lock issues during service restarts.
-- **Complete dependency distribution**: bundled plugins and their self-contained dependencies ship with the installer, reducing environment-specific failures.
-
-### Interface & Integrations
-
-- **Interface customization**: includes 10 community skins with mutually exclusive switching, one-click restoration of the native look, and font, size, and color settings.
-- **Mobile layout support**: improves settings panels, dialogs, sidebars, and conversations on narrow screens.
-- **WeChat ClawBot**: connects to WeChat ClawBot / OpenClaw through the bundled bridge plugin in one click.
-
----
-
-## Community & Support
-
-### Community Groups
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/qq-group-qrcode.jpg" alt="dsh EAC QQ Community Group 3 QR code" width="320" />
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/wechat-group-qrcode.jpg" alt="dsh EAC WeChat community group QR code" width="320" />
-    </td>
-  </tr>
-  <tr>
-    <td align="center"><strong>QQ Community Group 3</strong><br />Group number: 1083832019</td>
-    <td align="center"><strong>WeChat Community Group</strong></td>
-  </tr>
-</table>
-
-### Bug & Feature Requests
-
-To report a bug or suggest a feature, visit [https://eac.dtyg123.dpdns.org/](https://eac.dtyg123.dpdns.org/).
-
----
-
-## Developer Documentation
-
-### Build from Source
-
-```powershell
-cd dsh-desktop
-npm install -g pnpm@11.7.0       # kernel build toolchain (version pinned by the upstream packageManager field)
-node scripts/fetch-kernel.js     # required on first run: build kernel tarballs from upstream source (vendor/ is not committed; a proxy is needed on restricted networks)
-npm install                      # install dependencies only after the kernel tarballs are in place
-npm run fetch-runtime            # bundle node.exe + npm CLI
-node ../tauri-shell/stage-resources.mjs   # assemble the sidecar + dsh-desktop runtime tree
-cd ../tauri-shell
-npx -y @tauri-apps/cli@2 build   # release build + NSIS installer
-node make-portable.mjs           # portable zip (optional) -> target/release/portable/
-```
-
-Run tests:
-
-```powershell
-npm test                 # node --test test/*.test.ts
-```
-
-### Architecture
-
-```
-┌──────────────────────────────────────────────────────────┐
-│  Electron shell (main.js)                                │
-│  · Single-instance lock / window / menu / lifecycle      │
-│  · Session watcher (session-watcher.js) → notifications  │
-│  · Official updater (updater.js) → approved overlay      │
-│  · Client updater (client-updater.js) → download/replace │
-│  · Spawn node.exe from vendor|resources                  │
-└──────────────┬───────────────────────────────────────────┘
-               │  dsh web --host 127.0.0.1 --port 0
-               ▼
-       Bundled node.exe + @deepseek-ai/dsh
-       Path resolution: user overlay > bundled package
-       Prints "dsh web: http://127.0.0.1:<port>"
-               │  Parse URL, poll HTTP 200
-               ▼
-       Native window loads Web UI (localhost only)
-```
-
-### Project Structure
-
-```
-dsh-desktop/                  # Electron desktop app
-├── main.js                   # Electron main process
-├── updater.js                # Official dsh agent updater
-├── client-updater.js         # Desktop client updater
-├── balance.js                # DeepSeek balance query
-├── session-watcher.js        # Session completion watcher
-├── plugin-guard.js           # Plugin protection engine: snapshots/rollback/checks/repair/guarded startup/reports
-├── profile-module-heal.js    # Profile module shadowing repair: real directories + pnpm links
-├── preload.js                # Sandbox preload
-├── assets/                   # Loading/update pages, icons, companion plugins
-│   └── plugins/              # Desktop companions: dsh-balance / dsh-file-changes / dsh-terminal
-│                             # / dsh-easy-setup
-│                             # Bundled community plugins: dsh-webui-market / dsh-tool-vision
-│                             # / dsh-soul-md / dsh-web-mobile-fix
-│                             # (vendor and self-contained runtime dependencies included in the repository)
-├── scripts/                  # Build and development helper scripts
-├── build/icon.png            # electron-builder icon
-├── vendor/                   # Bundled node.exe / npm CLI (not committed)
-├── electron-builder.yml      # Build configuration
-└── dist/                     # Build output (not committed; published to Releases)
-openclaw-dsh-bridge/          # WeChat bridge plugin (optional, research-grade)
-research/                     # Third-party WeChat / bridge protocol research
-```
-
----
-
-## Acknowledgements
-
-### Plugin Acknowledgements
-
-| Plugin                                                          | Description                                                                                                                                                                                                           |
-| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Archify (provider: tt-a1i, EAC recommended catalog)             | Generates validated, interactive architecture, workflow, sequence, and data-flow diagrams from repositories or system descriptions, with standalone HTML/SVG/PNG export                                               |
-| computer-user (provider: jing-hy)                               | Screen reading plus mouse/keyboard automation (Codex-style computer use; pairs with picturereader so text-only models work)                                                                                           |
-| dsh-auto-compact                                                | Automatically sends `/compact` as the context approaches its limit                                                                                                                                                    |
-| @deepseek-ai/dsh-balance (provider: deepseek-ai)                | Account balance, cost estimates, and pricing settings                                                                                                                                                                 |
-| @nanmicoder/dsh-agent-teams (provider: nanmicoder)              | Multi-agent team collaboration: natural-language-driven captains, members, dependent tasks, and messaging, with a tree monitor in the web GUI                                                                         |
-| dsh-better-sidebar (provider: omdsh-dev)                        | VS Code-style right sidebar with Explorer, editor, terminal, Git, and browser views                                                                                                                                   |
-| dsh-change-review                                               | AI change review for automatically rechecking file modifications                                                                                                                                                      |
-| @deepseek-ai/dsh-client-file-changes (provider: deepseek-ai)    | Files view with session change tracking and one-click restore                                                                                                                                                         |
-| dsh-compact (provider: zixin947)                                | Request-path context compaction and overflow recovery                                                                                                                                                                 |
-| dsh-composer-dynamic-island (provider: says693)                 | Collapses selected composer buttons into a configurable compact island that expands upward                                                                                                                            |
-| @deepseek-ai/dsh-conversation-tweaks (provider: deepseek-ai)    | Collapses long output and adds a right-side conversation navigation rail                                                                                                                                              |
-| dsh-dafeiyu (provider: QCYTSN)                                  | Dafeiyu desktop companion                                                                                                                                                                                             |
-| dsh-deep-whale (provider: Small-tailqwq)                        | Source of the Deep-Sea Maid Workshop `maid-atelier` skin                                                                                                                                                              |
-| dsh-dock-settings                                               | Skills and MCP settings management                                                                                                                                                                                    |
-| dsh-eac-core-bridge (EAC companion)                             | Core bridge that safely routes tool and context contributions from isolated SDK plugins into the dsh agent (trusted component; extension failures never block core turns)                                             |
-| dsh-eac-locale-compat (EAC companion)                           | English compatibility layer for bundled DSH plugins that do not expose locale dictionaries                                                                                                                            |
-| @deepseek-ai/dsh-easy-setup (provider: deepseek-ai)             | Quick setup for vision models, `soul.md`, and migration                                                                                                                                                               |
-| dsh-feature-toggles (EAC companion)                             | "Enhanced features" section in Settings: one-click toggles for off-by-default bundled plugins (balance whale, AgentTeams, and more)                                                                                   |
-| @deepseek-ai/dsh-file-changes (provider: deepseek-ai)           | Session file-change projection                                                                                                                                                                                        |
-| dsh-file-drop-eac (provider: jing-hy)                           | Drag files or folders into a conversation                                                                                                                                                                             |
-| @deepseek-ai/dsh-float-window (provider: deepseek-ai)           | Opens a conversation in a separate window                                                                                                                                                                             |
-| dsh-font-custom                                                 | Custom fonts plus text and code colors                                                                                                                                                                                |
-| dsh-image-paste                                                 | Paste and send clipboard images                                                                                                                                                                                       |
-| dsh-meow-smooth (provider: Phant0Meow)                          | Meow-smooth front-end polish: composer auto-collapse on blur plus auto-collapsing sidebar on narrow screens after selecting a session                                                                                 |
-| dsh-message-rewind                                              | Rewrite a message and regenerate from that point                                                                                                                                                                      |
-| @vlln/dsh-navbar (provider: vlln)                               | Conversation-node navigation bar for jumping between user messages                                                                                                                                                    |
-| dsh-offpeak (provider: christophersmith2737-commits)            | DeepSeek peak/off-peak pricing reminder and interception                                                                                                                                                              |
-| @deepseek-ai/dsh-openclaw-bridge (provider: deepseek-ai)        | WeChat ClawBot / OpenClaw bridge                                                                                                                                                                                      |
-| dsh-pet (provider: PC2005-cloud)                                | Floating desktop pet for the page                                                                                                                                                                                     |
-| dsh-pet-settings                                                | Desktop pet settings section                                                                                                                                                                                          |
-| dsh-phone (EAC companion)                                       | Phone connection: LAN QR pairing plus a full reverse proxy of the Web UI                                                                                                                                              |
-| dsh-plugin-guard (provider: lxzy-7)                             | Pre-install snapshots, rollback, and guarded startup                                                                                                                                                                  |
-| dsh-plugin-healthcheck (provider: chenw2759-wq)                 | Static plugin health checks and risk inspection                                                                                                                                                                       |
-| @deepseek-ai/dsh-plugin-manager (provider: deepseek-ai)         | Lists and enables or disables bundled plugins                                                                                                                                                                         |
-| dsh-plugin-shield                                               | Plugin protection with snapshots, rollback, and health checks                                                                                                                                                         |
-| dsh-plugin-wizard                                               | Plugin selection wizard                                                                                                                                                                                               |
-| @deepseek-ai/dsh-prompt-custom (provider: deepseek-ai)          | Custom core prompts                                                                                                                                                                                                   |
-| dsh-raw-html (EAC hosted)                                       | VCP visual synesthesia: sandboxed HTML rendering through the official conversation slot, with typography, aesthetic, and design-spec capabilities                                                                     |
-| dsh-session-manager (provider: hkkz9522)                        | Session deletion and archive management                                                                                                                                                                               |
-| dsh-settings-groups                                             | Collapsible advanced options on the Settings page                                                                                                                                                                     |
-| dsh-settings-nav-custom                                         | Customization for the Settings sidebar                                                                                                                                                                                |
-| dsh-settings-scroll-fix (provider: says693)                     | Mouse-wheel and overflow scrolling repair for Settings                                                                                                                                                                |
-| @dsh-external/dsh-side-session (provider: dsh-external)         | Temporary side conversations that do not affect the main conversation                                                                                                                                                 |
-| dsh-soul-md (provider: Scorp1o117)                              | `soul.md` persona-card injection                                                                                                                                                                                      |
-| dsh-stt (provider: BAIKAI23333)                                 | Offline local speech-to-text: sherpa-onnx SenseVoice fills the composer from microphone input with wake words and a "send" voice command (off by default; all platforms, engine installed per-platform at build time) |
-| @deepseek-ai/dsh-terminal (provider: deepseek-ai)               | Interactive command line inside a conversation                                                                                                                                                                        |
-| @deepseek-ai/dsh-third-party-thinking (provider: deepseek-ai)   | Reasoning-effort controls for third-party models                                                                                                                                                                      |
-| dsh-tool-vision (provider: Scorp1o117)                          | Image analysis through OpenAI-compatible vision models                                                                                                                                                                |
-| dsh-undo-savepoint (provider: lire1131)                         | Configuration snapshots and undo/rollback                                                                                                                                                                             |
-| dsh-unified-market (provider: jing-hy)                          | Unified plugin marketplace aggregating three sources                                                                                                                                                                  |
-| dsh-viewport-lock (EAC companion)                               | Viewport containment: scroll clamping, stable hero centering, and transparent dynamic composer clipping across the desktop shell, browsers, and phone clients                                                         |
-| dsh-web-mobile-fix (provider: AcidGr)                           | Mobile layout fixes                                                                                                                                                                                                   |
-| dsh-web-plugin-manager (provider: LX2000WASD)                   | Entry point for guarded plugin installation and health checks                                                                                                                                                         |
-| dsh-web-ui (provider: zhu1090093659)                            | Source of nine built-in Web UI skins                                                                                                                                                                                  |
-| dsh-webui-market (provider: Sanqi-normal)                       | Community plugin directory with one-click installation and removal                                                                                                                                                    |
-| dsh-webui-prompt-optimizer (extracted from statem-li/dsh-webui) | Streaming prompt optimizer for the Web UI                                                                                                                                                                             |
-| dsh-whale-widget (provider: MeteorNOX)                          | Balance whale widget: today's usage, peak/off-peak pricing, random quotes, sound effects, and per-turn cost statistics                                                                                                |
-| picturereader (provider: jing-hy)                               | Unified image-understanding plugin                                                                                                                                                                                    |
-
-Thank you to every plugin provider for contributing to this project and the open-source community. With so many plugins, we may not have identified every plugin and source individually. If you recognize your work here, please let us know so we can add it to the acknowledgements. You are also welcome to join our community groups to exchange ideas and help the ecosystem grow.
-
-### Skin Sources & Licenses
-
-The Settings page includes 10 Web UI skins and keeps the native appearance by default. Enabling one skin automatically disables the others, and the default look can be restored in one click. Complete source, author, and license information ships with the installer.
-
-Nine skins come from the community project [dsh-web-ui](https://github.com/zhu1090093659/dsh-web-ui) under BSD-3-Clause. `maid-atelier` comes from [dsh-deep-whale / Deep-Sea Maid Workshop](https://github.com/Small-tailqwq/dsh-deep-whale) under CC BY-NC-SA 4.0 and may not be used commercially.
-
-| Skin                                  | Source                                                            | License                              |
-| ------------------------------------- | ----------------------------------------------------------------- | ------------------------------------ |
-| xp (Windows XP style)                 | [dsh-web-ui](https://github.com/zhu1090093659/dsh-web-ui)         | BSD-3-Clause                         |
-| qq98 (classic QQ 98 style)            | Same as above                                                     | BSD-3-Clause                         |
-| ths (Tonghuashun style)               | Same as above                                                     | BSD-3-Clause                         |
-| blue-fantasy                          | Same as above                                                     | BSD-3-Clause                         |
-| dragon-heir                           | Same as above                                                     | BSD-3-Clause                         |
-| minecraft                             | Same as above                                                     | BSD-3-Clause                         |
-| trading                               | Same as above                                                     | BSD-3-Clause                         |
-| whale-song                            | Same as above                                                     | BSD-3-Clause                         |
-| miku (Hatsune Miku)                   | Same as above                                                     | BSD-3-Clause                         |
-| maid-atelier (Deep-Sea Maid Workshop) | [dsh-deep-whale](https://github.com/Small-tailqwq/dsh-deep-whale) | **CC BY-NC-SA 4.0** (non-commercial) |
-
-### Contributors
-
-Thanks to every contributor — special thanks to [@CharlesAQ](https://github.com/CharlesAQ) for the macOS desktop port ([PR #234](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/pull/234)): the darwin branches of the Tauri shell, the platform adapter layer, darwin resource staging & pruning, and the `.app`/`.dmg` packaging configuration that brought EAC to Apple Silicon for the first time.
-
-<p align="center">
-  <a href="https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=Ebony-Vinyl/Deepseek-Harness-EAC" />
-  </a>
+<p>
+<a href="https://github.com/Ebony-Vinyl" title="Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=128" width="64" height="64" alt="Ebony-Vinyl" /></a>
+<a href="https://github.com/metaone01" title="metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=128" width="64" height="64" alt="metaone01" /></a>
+<a href="https://github.com/jing-hy" title="jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=128" width="64" height="64" alt="jing-hy" /></a>
+<a href="https://github.com/zixin947" title="zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=128" width="64" height="64" alt="zixin947" /></a>
+<a href="https://github.com/says693" title="says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=128" width="64" height="64" alt="says693" /></a>
+<a href="https://github.com/dtyg123" title="dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=128" width="64" height="64" alt="dtyg123" /></a>
+<a href="https://github.com/lanyun077" title="lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=128" width="64" height="64" alt="lanyun077" /></a>
+<a href="https://github.com/BAIKAI23333" title="BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=128" width="64" height="64" alt="BAIKAI23333" /></a>
+</p>
+<p>
+<a href="https://github.com/nishantpurohit04" title="nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=128" width="64" height="64" alt="nishantpurohit04" /></a>
+<a href="https://github.com/ViscaOwO" title="ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=128" width="64" height="64" alt="ViscaOwO" /></a>
+<a href="https://github.com/jiang8297" title="jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=128" width="64" height="64" alt="jiang8297" /></a>
+<a href="https://github.com/Luoye-hb" title="Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=128" width="64" height="64" alt="Luoye-hb" /></a>
+<a href="https://github.com/look-back-lysj" title="look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=128" width="64" height="64" alt="look-back-lysj" /></a>
+<a href="https://github.com/T-Auto" title="T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=128" width="64" height="64" alt="T-Auto" /></a>
+<a href="https://github.com/maliang233" title="maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=128" width="64" height="64" alt="maliang233" /></a>
+<a href="https://github.com/lbn2011" title="lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=128" width="64" height="64" alt="lbn2011" /></a>
 </p>
 
+[Ebony-Vinyl](https://github.com/Ebony-Vinyl) · [metaone01](https://github.com/metaone01) · [jing-hy](https://github.com/jing-hy) · [zixin947](https://github.com/zixin947) · [says693](https://github.com/says693) · [dtyg123](https://github.com/dtyg123) · [lanyun077](https://github.com/lanyun077) · [BAIKAI23333](https://github.com/BAIKAI23333) · [nishantpurohit04](https://github.com/nishantpurohit04) · [ViscaOwO](https://github.com/ViscaOwO) · [jiang8297](https://github.com/jiang8297) · [Luoye-hb](https://github.com/Luoye-hb) · [look-back-lysj](https://github.com/look-back-lysj) · [T-Auto](https://github.com/T-Auto) · [maliang233](https://github.com/maliang233) · [lbn2011](https://github.com/lbn2011)
+
+</div>
+
+Special thanks to [@Nuomi9](https://github.com/Nuomi9) for the macOS port ([PR #234](https://github.com/DSH-EAC/EAC-Desktop/pull/234)). Plugin and skin authors are recorded in [ecosystem credits](docs/ECOSYSTEM-CREDITS.md).
+
+## License and acknowledgements
+
+EAC uses the [MIT License](LICENSE). Thanks to [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness), [dsh-dpx](https://github.com/T-Auto/dsh-dpx), Tauri, and every plugin, skin, platform and documentation contributor.
+
+Third-party components retain their own copyrights and licenses. Skin sources include CC BY-NC-SA 4.0 material; usage and redistribution must follow the relevant component terms.
+
 ---
 
-## Star History
+<div align="center"><sub>Embracing All Creation · A focused core, room for more.</sub></div>
 
-<a href="https://www.star-history.com/?repos=Ebony-Vinyl%2FDeepseek-Harness-EAC&type=date&legend=bottom-right">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&theme=dark&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=Ebony-Vinyl/Deepseek-Harness-EAC&type=date&legend=bottom-right&sealed_token=5SkHr7TORH0WuK6eeH5IP-Q2hISGL0m3EDvMKDG6hAUNQssgWBUixIuZWP_ygvty93H_loEZ8JUEgXKy8xGAuH4-mq_DTlClZbM_mOYiomJbfc3zANNWFg" />
- </picture>
+## Star history
+
+<a href="https://www.star-history.com/#DSH-EAC/EAC-Desktop&amp;Date">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date&amp;theme=dark" />
+<source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" />
+<img alt="Star History" src="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" width="960" />
+</picture>
 </a>
-
----
-
-## License
-
-MIT. Based on [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) (MIT). Built-in skins remain the property of their original authors; see the skin license table above.
