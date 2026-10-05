@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>Deepseek Harness EAC — Embracing All Creation</h1>
+<h1><img src="docs/assets/EAC-Desktop.svg" alt="Deepseek Harness EAC — Embracing All Creation" width="808" /></h1>
 
 **_EAC = Embracing All Creation（揽尽万象）_**
 
