@@ -19,9 +19,9 @@
 
 </div>
 
-**把 Agent 的能力，组织成一张真正能工作的桌面。**
+**励志熔铸数百个插件。**
 
-Deepseek Harness EAC 是基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的开源桌面工作台。它将对话、项目文件、工具执行与插件生态连接起来，配合原生窗口、独立运行环境和随包运行时，让你从安装直接进入工作。
+Deepseek Harness EAC 是基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的开源第三方桌面插件整合工作台
 
 **EAC · Embracing All Creation · 揽尽万象。** 开放的是能力，清晰的是边界：桌面壳负责体验，服务层负责运行，Harness 内核负责 Agent，扩展包负责更多可能。
 
