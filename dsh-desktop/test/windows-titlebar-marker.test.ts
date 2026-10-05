@@ -11,12 +11,9 @@ import test from 'node:test';
 // Tauri 外壳后 Electron 整条链不再随包分发，Tauri 侧若不同等注入，内核所有
 // `[data-windows-titlebar]` 规则与 `--dsh-windows-titlebar-height` 会静默落空。
 //
-// 更隐蔽的是第二个缺口：皮肤 system.default 的
-//   `html[data-dsh-title-bar-height] body { padding-top: 36px }`
-// 只把内容往下推，没有同步扣减子树高度。`#root`/`.frame` 仍是 body 的 100%，
-// 底边超出 body 36px，被 `body{overflow:hidden}` 裁掉 —— 落在那 36px 里的
-// 侧边栏 footArea（`sidebar.settings`）底部不可见，用户找不到设置/账号入口。
-// 皮肤是钉版二进制产物（SHA-256 双重校验），不能就地改，故壳层注入补偿规则。
+// 内核 frame 已负责标题栏留白；壳层必须取消钉版皮肤的 body padding，
+// 否则内容与 resize handle 多下移 36px。真实浏览器的几何与主题回归
+// 见 shell-ui-compat.test.ts，本文件只锁定 document-start 注入契约。
 //
 // 内核的 preload-windows.client.spec.ts 只覆盖 Electron 实现，覆盖不到 Tauri
 // 真实运行路径，因此这里锚定壳层注入脚本的契约。
@@ -73,29 +70,17 @@ test('Tauri 注入脚本补回 Windows 自绘标题栏标记（内核 preload-wi
   );
 });
 
-test('壳层注入 frame 高度补偿，修复被 body overflow 裁掉的底部区域', () => {
-  // 皮肤只 `padding-top` 不扣高度的缺口由壳层补：把 frame 高度改为
-  // calc(100% - <标题栏高度>)，否则 footArea（设置/账号入口）底部被裁。
-  assert.match(
-    mainRs,
-    /height:calc\(100% - \{height\}px\) !important/,
-    '必须注入 frame 高度补偿规则，否则底部入口仍被 overflow 裁掉',
-  );
-
-  // 选择器必须锚定内核稳定契约属性，而不是 CSS-modules 哈希类名 ——
-  // 后者随内核前端构建变化即静默失效（与 viewport-lock 的历史教训一致）。
-  assert.match(
-    mainRs,
-    /\[data-control-name=\\?"session-root\\?"\]>\[class\*=frame\]/,
-    '补偿规则必须锚定 data-control-name="session-root"，不得依赖哈希类名',
-  );
-
-  // 样式注入必须幂等：重复注入会累积多份 style 节点。
-  assert.match(
-    mainRs,
-    /if\(!document\.getElementById\('\{style_id\}'\)\)/,
-    '样式注入必须按 id 幂等',
-  );
+test('壳层让内核统一预留标题栏空间，取消重复的 body 留白', () => {
+  assert.match(mainRs, /body\{\{padding-top:0 !important/,
+    '钉版皮肤的 body padding 必须取消，否则与内核 frame 重复预留');
+  assert.match(mainRs, /height:100% !important;max-height:100% !important/,
+    'frame 必须占满视口，再由内核内部扣除标题栏空间');
+  assert.match(mainRs, /\[data-dsh-title-bar-height\]\[data-windows-titlebar\]/,
+    '布局覆盖只用于拥有内核 Windows 标题栏契约的壳页面');
+  assert.match(mainRs, /\[data-control-name=\\?"session-root\\?"\]>\[class\*=frame\]/,
+    'frame 选择器不得依赖 CSS-modules 哈希');
+  assert.match(mainRs, /if\(!document\.getElementById\('\{style_id\}'\)\)/,
+    '样式注入必须按 id 幂等');
 });
 
 test('标记与高度补偿在 bridge_init_script 的每次导航生效（与端口同段）', () => {

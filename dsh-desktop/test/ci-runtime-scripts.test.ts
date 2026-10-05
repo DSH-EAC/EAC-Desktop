@@ -25,10 +25,10 @@ function createStageFixture(): string {
   mkdirSync(join(desktop, 'lib'), { recursive: true });
   for (const file of ['atomic-json.js',
     // v6 Task 3.3：companion-sync / guard-box 消费的通用库
-    'plugin-copy.js']) {
+    'plugin-copy.js', 'bundle-identity.js']) {
     writeFileSync(join(desktop, 'lib', file), 'module.exports = {};\n');
   }
-  for (const file of ['proc.js', 'platform.js', 'runtime-paths.js', 'profile.js', 'runtime-patches.js', 'boot-server.js',
+  for (const file of ['proc.js', 'platform.js', 'runtime-paths.js', 'package-manager.js', 'plugin-remove.js', 'profile.js', 'runtime-patches.js', 'boot-server.js',
     // v6 Task 3.3：插件治理三件套 + lib/desktop 依赖
     'guard-box.js', 'companion-sync.js', 'plugin-ops.js', 'install-profile.js', 'plugin-sync-registry.js',
     // v6 Task 3.3 阶段 3：files.* 白名单根
@@ -43,10 +43,16 @@ function createStageFixture(): string {
   }
   // v6 Task 3.3：plugin-ops 消费的脚本
   mkdirSync(join(desktop, 'scripts'), { recursive: true });
-  for (const file of ['onboarding.js', 'plugin-manager-patch.js']) {
+  for (const file of ['onboarding.js', 'plugin-manager-patch.js', 'eac-cli.js']) {
     writeFileSync(join(desktop, 'scripts', file), 'module.exports = {};\n');
   }
   writeFileSync(join(desktop, 'bundle-manifest.json'), JSON.stringify({ version: 1, packages: { fixture: { files: 1 } } }));
+  mkdirSync(join(desktop, 'vendor', 'pnpm', 'bin'), { recursive: true });
+  writeFileSync(join(desktop, 'vendor', 'pnpm', 'bin', 'pnpm.cjs'), '');
+  writeFileSync(join(desktop, 'vendor', 'pnpm', 'bin', 'pnpm.mjs'), '');
+  mkdirSync(join(desktop, 'vendor', 'pnpm', 'dist'), { recursive: true });
+  writeFileSync(join(desktop, 'vendor', 'pnpm', 'dist', 'pnpm.mjs'), '');
+  writeFileSync(join(desktop, 'vendor', 'pnpm', 'package.json'), '{"version":"11.7.0"}');
   return root;
 }
 
@@ -56,7 +62,7 @@ test('staged runtime verifier accepts the minimal runtime closure', () => {
     const result = verifyStagedRuntime(root);
     assert.equal(result.bundle.ok, true);
     // v6 Task 3.3：治理闭包（32）+ 阶段 3 的 file-roots（33）。
-    assert.equal(result.requiredFiles, 33);
+    assert.equal(result.requiredFiles, 41);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

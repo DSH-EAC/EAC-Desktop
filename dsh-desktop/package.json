@@ -11,7 +11,8 @@
     "fetch-node": "npm run build && node scripts/fetch-node.js",
     "postinstall": "npm run build && node scripts/patch-deps.js || exit 0",
     "fetch-npm": "npm run build && node scripts/fetch-npm.js",
-    "fetch-runtime": "npm run build && node scripts/fetch-node.js && node scripts/fetch-npm.js",
+    "fetch-pnpm": "npm run build && node scripts/fetch-pnpm.js",
+    "fetch-runtime": "npm run build && node scripts/fetch-node.js && node scripts/fetch-npm.js && node scripts/fetch-pnpm.js",
     "fetch-kernel": "npm run build && node scripts/fetch-kernel.js",
     "gen-kernel-overrides": "npm run build && node scripts/gen-kernel-overrides.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
@@ -71,6 +72,7 @@
   "devDependencies": {
     "@types/node": "24.13.3",
     "jsdom": "^30.0.1",
+    "pnpm": "11.7.0",
     "typescript": "^7.0.2"
   },
   "overrides": {

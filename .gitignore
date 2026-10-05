@@ -71,3 +71,5 @@ updates/
 
 # verify-delete-session.js 运行产物
 tmp-verify-delete/
+
+vendor/

@@ -579,9 +579,18 @@
     // plugin-wizard 明确不接入 —— 故 balance* 与 pluginWizard 为终态留空，
     // 由 bridge-preload-parity.test.ts 的 STILL_RETIRED 锁定不得回归。
     pluginManager: {
-      list: function () { return call('plugins.list', {}); },
+      list: function () {
+        return call('plugins.list', {}).then(function (result: unknown) {
+          // 旧插件读取 rows；保留 sidecar 的 list 和其它字段，不修改 RPC 回包。
+          if (!result || typeof result !== 'object' || Array.isArray(result)) return result;
+          var snapshot = result as Record<string, unknown>;
+          if (!Array.isArray(snapshot.list)) return result;
+          return Object.assign({}, snapshot, { rows: snapshot.list });
+        });
+      },
       setEnabled: function (id: string, enabled: boolean) { return call('plugins.set-enabled', { id: id, enabled: enabled }); },
-      setRemoved: function (id: string, removed: boolean) { return call('plugins.set-removed', { id: id, removed: removed }); },
+      // 外部插件卸载事务最多等待 120s；桥的超时需覆盖事务收尾。
+      setRemoved: function (id: string, removed: boolean) { return call('plugins.set-removed', { id: id, removed: removed }, 130000); },
     },
     guard: {
       action: function (action: string, value?: unknown) { return call('guard.action', { action: action, value: value }); },
@@ -1295,11 +1304,26 @@
     });
   })();
 
+  function syncHostThemeBoundary(): void {
+    // 皮肤的通用锚点规则使用壳层深色文字。只在 DSH 内容边界恢复内核
+    // label token，让未指定颜色的插件继承当前主题；子节点自有颜色不受影响。
+    if (document.documentElement.classList.contains('eac-shell') || !document.getElementById('root')) return;
+    if (!document.getElementById('__dsh_host_theme__')) {
+      var style = document.createElement('style');
+      style.id = '__dsh_host_theme__';
+      style.textContent = 'html:not(.eac-shell) [data-dsh-host-theme][data-region][data-control-name]{color:var(--dsw-alias-label-primary, inherit)}';
+      document.head.appendChild(style);
+    }
+  }
+
   function nameUiSkinAnchors(): void {
+    var hostPage = !document.documentElement.classList.contains('eac-shell') && !!document.getElementById('root');
     function name(selector: string, region: string, control: string): void {
       document.querySelectorAll(selector).forEach(function (node) {
+        if (node.closest('#dsh-exit-overlay')) return;
         node.setAttribute('data-region', region);
         node.setAttribute('data-control-name', control);
+        if (hostPage) node.setAttribute('data-dsh-host-theme', '');
       });
     }
 
@@ -1309,8 +1333,10 @@
     name('[data-slot="bottom-sidebar"]', 'bottom-sidebar', 'sidebar-root');
     name('[data-slot="left-sidebar"]', 'left-sidebar', 'sidebar-root');
     name('[data-slot="right-sidebar"]', 'right-sidebar', 'sidebar-root');
-    name('[role="dialog"]', 'overlay', 'dialog-surface');
+    name('[role="dialog"]:not(#dsh-exit-overlay)', 'overlay', 'dialog-surface');
     name('[data-floating-ui-portal], [data-radix-popper-content-wrapper], ._7KE1Ra_menu, .ra1x4W_menu', 'overlay', 'popup-surface');
+
+    syncHostThemeBoundary();
 
     document.querySelectorAll('[role="dialog"]').forEach(function (dialog) {
       dialog.querySelectorAll('[class*="navList"], [class*="options"]').forEach(function (node) {
@@ -1394,7 +1420,7 @@
     injectUiSkin();
     nameUiSkinAnchors();
 
-    // 声明自绘标题栏高度：内核据此把顶部固定元素下移（fixed 侧栏等）。
+    // 声明壳层皮肤使用的高度；Windows 内核标记由 document-start 脚本提供。
     document.documentElement.setAttribute('data-dsh-title-bar-height', String(BAR_HEIGHT));
 
     var bar = document.createElement('div');

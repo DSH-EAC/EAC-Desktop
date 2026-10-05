@@ -157,7 +157,21 @@ guardBoxMod.init({
   getDesktopProfile: desktopProfileFn,
   getDshBin: () => (pathsMod.dshBin as () => string)(),
 });
-pluginOpsMod.init({ log });
+pluginOpsMod.init({
+  log,
+  removeBundle: (name: string) => {
+    const { removePluginPackage } = require(LIB('plugin-remove')) as typeof import('../../dsh-desktop/lib/desktop/plugin-remove');
+    return removePluginPackage({
+      node: (pathsMod.nodeExe as () => string)(),
+      carrier: (pathsMod.dshCli as () => string)(),
+      kernel: (pathsMod.dshBin as () => string)(),
+      profile: desktopProfileFn(),
+      name,
+      cwd: userDataDir,
+      env: (procMod.childEnv as () => NodeJS.ProcessEnv)(),
+    });
+  },
+});
 companionSyncMod.init({
   log,
   getDshHome: () => dshHome,
@@ -414,6 +428,7 @@ bootMod.init({
   desktopProfileDir: () => (profileMod.desktopProfileDir as () => string)(),
   nodeExe: () => (pathsMod.nodeExe as () => string)(),
   dshBin: () => (pathsMod.dshBin as () => string)(),
+  dshCli: () => (pathsMod.dshCli as () => string)(),
   loadSettings,
   saveSettings,
   isQuitting: () => quitting,
@@ -803,8 +818,8 @@ const methods: Record<string, (p: RpcParams) => unknown> = {
     (pluginOpsMod.pluginManagerSetEnabled as (id: string, en: boolean) => Record<string, unknown>)(
       String((p && p.id) || ''), !!(p && p.enabled),
     ),
-  'plugins.set-removed': (p): RpcResult =>
-    (pluginOpsMod.pluginManagerSetRemoved as (id: string, rm: boolean) => Record<string, unknown>)(
+  'plugins.set-removed': async (p): Promise<RpcResult> =>
+    await (pluginOpsMod.pluginManagerSetRemoved as (id: string, rm: boolean) => RpcResult | Promise<RpcResult>)(
       String((p && p.id) || ''), !!(p && p.removed),
     ),
   // 保护中心动作面（guard-box 真实现覆盖 v6 桩）。

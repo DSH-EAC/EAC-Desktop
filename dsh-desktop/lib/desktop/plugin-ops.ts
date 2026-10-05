@@ -50,6 +50,12 @@ const {
 import { desktopProfileDir } from './profile';
 import { writeFileAtomic } from '../atomic-json';
 import { APP_ROOT } from './runtime-paths';
+import { parsePatchData, resolveBundleIdentities, toggleBundleInPatch } from '../bundle-identity';
+import type { BundleIdentities, BundleIdentity } from '../bundle-identity';
+const { canonicalBundleId, KERNEL_BUNDLE_PACKAGES } = require('../../plugin-manager-state') as {
+  canonicalBundleId(name: string): string;
+  KERNEL_BUNDLE_PACKAGES: Set<string>;
+};
 
 interface CompanionPlugin {
   id: string;
@@ -62,7 +68,10 @@ interface CompanionPlugin {
 /** 注入接口：由宿主（Electron main / Tauri sidecar）在启动时提供。 */
 export interface PluginOpsCtx {
   log(tag: string, msg: string): void;
+  removeBundle?(name: string): Promise<PluginMutationResult>;
 }
+
+export interface PluginMutationResult { ok: boolean; error?: string; restartRequired?: boolean }
 
 let ctx!: PluginOpsCtx;
 export function init(d: PluginOpsCtx): void { ctx = d; }
@@ -100,14 +109,41 @@ export function pluginManagerReadPatch(): PatchReadResult {
   const file = path.join(desktopProfileDir(), 'cordis.patch.yml');
   let text = '';
   try { text = fs.readFileSync(file, 'utf8'); } catch { /* 缺省空 */ }
-  const yaml = loadDshYamlDialect();
-  if (!yaml) return { file, text, entries: [] };
   try {
-    const parsed = yaml.load(text);
+    const parsed = parsePatchData(text);
     return { file, text, entries: Array.isArray(parsed) ? parsed : [] };
   } catch {
     return { file, text, entries: [] };
   }
+}
+
+function profileBundles(): { names: string[]; identities: BundleIdentities } {
+  let names: string[] = [];
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.join(desktopProfileDir(), 'package.json'), 'utf8'));
+    const bundles: unknown = manifest.dsh?.profile?.bundles;
+    if (Array.isArray(bundles)) names = bundles.filter((name): name is string => typeof name === 'string');
+  } catch { /* An absent manifest supplies no package aliases. */ }
+  return { names, identities: resolveBundleIdentities(desktopProfileDir(), names) };
+}
+
+function bundleTarget(id: string): { name: string; identity: BundleIdentity } | null {
+  const { names, identities } = profileBundles();
+  const matches = names.filter((name) => {
+    const identity = identities[name];
+    return canonicalBundleId(name) === id || !!identity?.entryIds?.includes(id);
+  });
+  if (matches.length > 1) return { name: '', identity: { ok: false, error: '插件标识归属冲突: ' + id } };
+  const name = matches[0];
+  if (!name) return null;
+  const identity = identities[name]!;
+  if (identity.ok) for (const entry of identity.entries) {
+    const companion = COMPANION_PLUGINS.find((plugin) => plugin.id === entry.id);
+    if (companion && companion.name !== name) {
+      return { name, identity: { ok: false, error: '插件条目与内置插件归属冲突: ' + entry.id } };
+    }
+  }
+  return { name, identity };
 }
 
 export function pluginManagerPackageDescription(name: string): string {
@@ -127,11 +163,7 @@ export function pluginManagerPackageDescription(name: string): string {
 
 export function pluginManagerCollect(): unknown[] {
   const { entries } = pluginManagerReadPatch();
-  let bundles: unknown[] = [];
-  try {
-    const m = JSON.parse(fs.readFileSync(path.join(desktopProfileDir(), 'package.json'), 'utf8'));
-    bundles = (m && m.dsh && m.dsh.profile && Array.isArray(m.dsh.profile.bundles)) ? m.dsh.profile.bundles : [];
-  } catch { /* 缺省空 */ }
+  const { names: bundles, identities: bundleIdentities } = profileBundles();
   // 私有维护（台账 eac-original）标记：台账存包名，行按配套插件 id 记。
   const privateNames = privateMaintainedPluginNames();
   const privateIds = new Set(COMPANION_PLUGINS.filter((p) => privateNames.has(p.name)).map((p) => p.id));
@@ -141,6 +173,7 @@ export function pluginManagerCollect(): unknown[] {
     removedIds: removedPluginIds(),
     describe: (name: string) => pluginManagerPackageDescription(name),
     bundles,
+    bundleIdentities,
     privateIds,
     // M3/#416：canonical 分级映射 + 推荐包 id（行上暴露 distributionClass/tierLabel）。
     distributionClasses: PLUGIN_DISTRIBUTION_CLASSES,
@@ -155,12 +188,15 @@ export function pluginManagerResolveName(id: string): string {
   if (c) return c.name;
   const { entries } = pluginManagerReadPatch();
   for (const entry of entries) {
-    const e = entry as { insert?: { id?: string; name?: string }[] };
+    const e = entry as { id?: string; name?: string; insert?: { id?: string; name?: string }[] };
+    if (e && e.id === id && typeof e.name === 'string') return e.name;
     if (e && Array.isArray(e.insert)) {
       const it = e.insert.find((x) => x && x.id === id);
       if (it && it.name) return it.name;
     }
   }
+  const target = bundleTarget(id);
+  if (target?.identity.ok) return target.name;
   return '';
 }
 
@@ -198,9 +234,20 @@ function restoreCompanionPlugin(p: CompanionPlugin): { ok: boolean; error?: stri
 }
 
 // removed=true 移除（卸载语义）；removed=false 恢复。核心插件拒绝移除。
-export function pluginManagerSetRemoved(id: string, removed: boolean): { ok: boolean; error?: string; restartRequired?: boolean } {
+export function pluginManagerSetRemoved(id: string, removed: boolean): PluginMutationResult | Promise<PluginMutationResult> {
   const p = COMPANION_PLUGINS.find((x) => x.id === id);
-  if (!p) return { ok: false, error: '未知内置插件: ' + String(id) };
+  if (!p) {
+    const target = bundleTarget(id);
+    if (!target) return { ok: false, error: '未知插件: ' + String(id) };
+    if (!target.identity.ok) return { ok: false, error: target.identity.error };
+    if (onboardingLogic.CORE_PLUGIN_IDS.has(id) || onboardingLogic.CORE_PLUGIN_IDS.has(canonicalBundleId(target.name))
+      || KERNEL_BUNDLE_PACKAGES.has(target.name)) {
+      return { ok: false, error: '核心插件不可移除: ' + id };
+    }
+    if (!removed) return { ok: false, error: '请通过插件市场重新安装外部插件' };
+    if (!ctx.removeBundle) return { ok: false, error: '当前宿主未提供外部插件卸载服务' };
+    return ctx.removeBundle(target.name);
+  }
   if (onboardingLogic.CORE_PLUGIN_IDS.has(id)) {
     return { ok: false, error: '核心插件不可移除: ' + String(id) };
   }
@@ -294,11 +341,27 @@ export function fileDropSave(dataUrl: string, name: string): { ok: boolean; erro
 // 与上游的差异 —— 「启用」保留顶层裸条目 {id, name} 而不是整条移除，这样
 // 默认禁用的配套插件（dsh-pet）被用户启用后不会被下次 sync 重新插回
 // disabled 行（sync 的「已有行不重写」规则自然接管）。
-export function pluginManagerSetEnabled(id: string, enabled: boolean): { ok: boolean; error?: string } {
+export function pluginManagerSetEnabled(id: string, enabled: boolean): PluginMutationResult {
   // M3/#416 L1：内置（builtin）分级 = onboarding CORE_PLUGIN_IDS（同一生成
   // 注册表来源），默认启用且不可停用 —— 管理页的行同样锁定为不可切换。
   if (onboardingLogic.CORE_PLUGIN_IDS.has(id)) {
     return { ok: false, error: '核心插件不可停用: ' + String(id) };
+  }
+  const target = bundleTarget(id);
+  if (target) {
+    if (!target.identity.ok) return { ok: false, error: target.identity.error };
+    if (onboardingLogic.CORE_PLUGIN_IDS.has(canonicalBundleId(target.name))
+      || KERNEL_BUNDLE_PACKAGES.has(target.name)) {
+      return { ok: false, error: '核心插件不可停用: ' + id };
+    }
+    const { file, text } = pluginManagerReadPatch();
+    try {
+      const patched = toggleBundleInPatch(text, target.identity, enabled);
+      if (patched !== text) writeFileAtomic(file, patched);
+      return { ok: true, restartRequired: true };
+    } catch (error) {
+      return { ok: false, error: String((error as Error).message || error) };
+    }
   }
   const file = path.join(desktopProfileDir(), 'cordis.patch.yml');
   let text = '';
@@ -306,7 +369,7 @@ export function pluginManagerSetEnabled(id: string, enabled: boolean): { ok: boo
   if (!text.trim()) text = '# dsh web profile patch（由 Deepseek Harness EAC 维护）\n';
 
   const name = pluginManagerResolveName(id);
-  if (!enabled && !name) return { ok: false, error: '无法解析插件包名: ' + id };
+  if (!name) return { ok: false, error: '无法解析插件包名: ' + id };
 
   let patched: string;
   try {
@@ -322,5 +385,5 @@ export function pluginManagerSetEnabled(id: string, enabled: boolean): { ok: boo
       return { ok: false, error: String(((err as Error).message) || err) };
     }
   }
-  return { ok: true };
+  return { ok: true, restartRequired: true };
 }

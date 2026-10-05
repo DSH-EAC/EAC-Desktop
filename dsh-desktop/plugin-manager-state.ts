@@ -1,5 +1,7 @@
 'use strict';
 
+import type { BundleIdentities } from './lib/bundle-identity';
+
 // 插件管理状态合并（v4.2）：把 profile cordis.patch.yml 解析出的 entries
 // 合并成管理页 / 桌宠设置可消费的行列表。纯函数，不碰磁盘 —— 磁盘读取在
 // main.js 侧完成（pluginManagerReadPatch / profile package.json bundles），
@@ -149,9 +151,12 @@ interface PluginRow {
   enableChoice: boolean;
   /** L2 的推荐包 id（其余为 null）。 */
   pack: string | null;
+  entryIds?: string[];
+  error?: string;
 }
 
 interface CollectCtx {
+  bundleIdentities?: BundleIdentities;
   companion?: Array<{ id: string; name: string }>;
   coreIds?: Iterable<string>;
   removedIds?: Iterable<string>;
@@ -206,8 +211,8 @@ function collectPluginRows(entries: unknown[], ctx: CollectCtx = {}): PluginRow[
     ? ctx.recommendedPack
     : null;
 
-  const insertById = new Map<string, { name: string; disabled: boolean }>();
-  const userById = new Map<string, { name: string; disabled: boolean; hasConfig: boolean }>();
+  const insertById = new Map<string, { name: string; disabled: boolean; hasDisabled: boolean }>();
+  const userById = new Map<string, { name: string; disabled: boolean; hasDisabled: boolean; hasConfig: boolean }>();
   for (const entry of entries) {
     if (!entry || typeof entry !== 'object') continue;
     const ent = entry as { insert?: unknown; id?: unknown };
@@ -215,7 +220,7 @@ function collectPluginRows(entries: unknown[], ctx: CollectCtx = {}): PluginRow[
       for (const it of (ent.insert as unknown[])) {
         if (it && typeof (it as { id?: unknown }).id === 'string') {
           const i2 = it as { id: string; name?: string; disabled?: boolean };
-          insertById.set(i2.id, { name: i2.name || '', disabled: i2.disabled === true });
+          insertById.set(i2.id, { name: i2.name || '', disabled: i2.disabled === true, hasDisabled: typeof i2.disabled === 'boolean' });
         }
       }
     } else if (typeof ent.id === 'string') {
@@ -223,6 +228,7 @@ function collectPluginRows(entries: unknown[], ctx: CollectCtx = {}): PluginRow[
       userById.set(e2.id, {
         name: e2.name || '',
         disabled: e2.disabled === true,
+        hasDisabled: typeof e2.disabled === 'boolean',
         hasConfig: e2.config !== undefined && e2.config !== null,
       });
     }
@@ -262,12 +268,29 @@ function collectPluginRows(entries: unknown[], ctx: CollectCtx = {}): PluginRow[
       enableChoice: distributionClass === 'recommended',
       pack: distributionClass === 'recommended' ? recommendedPack : null,
     });
+    const identity = ctx.bundleIdentities?.[name];
+    if (identity) {
+      const row = rows[rows.length - 1]!;
+      if (!identity.ok) {
+        row.toggleable = false;
+        row.removable = false;
+        row.error = identity.error;
+      } else {
+        row.entryIds = identity.entryIds;
+        row.enabled = !isRemoved && identity.entries.every((entry) => {
+          const override = userById.get(entry.id) || insertById.get(entry.id);
+          return !(override?.hasDisabled ? override.disabled : entry.disabled);
+        });
+        row.toggleable = !isRemoved && !isCore && !builtin;
+        row.removable = !isRemoved && !isCore && !builtin;
+      }
+    }
   };
   for (const p of companion) {
     addRow(p.id, p.name, 'companion', { removed: removedIds.has(p.id), core: coreIds.has(p.id) });
   }
-  for (const [id, info] of insertById) if (!companionById.has(id)) addRow(id, info.name, 'other');
-  for (const [id, u] of userById) if (!companionById.has(id)) addRow(id, u.name, 'other');
+  const bundledEntryIds = new Set(Object.values(ctx.bundleIdentities || {})
+    .flatMap((identity) => identity.entryIds || []));
   // bundles（dsh.profile.bundles）里除 companion 之外还有两类：内核骨架
   // （官方 web profile 的注册点，禁了界面会坏）与用户/市场装入的第三方包
   // （dsh plugin add / 市场安装同样登记进 bundles）。旧实现把后者也一律标
@@ -281,11 +304,14 @@ function collectPluginRows(entries: unknown[], ctx: CollectCtx = {}): PluginRow[
     const id = canonicalBundleId(name);
     if (!seen.has(id)) addRow(id, name, isKernelBundle(name, id) ? 'core' : 'other');
   }
+  for (const [id, info] of insertById) if (!companionById.has(id) && !bundledEntryIds.has(id)) addRow(id, info.name, 'other');
+  for (const [id, u] of userById) if (!companionById.has(id) && !bundledEntryIds.has(id)) addRow(id, u.name, 'other');
   const order = { companion: 0, other: 1, core: 2 };
   return rows.sort((a, b) => order[a.group] - order[b.group] || a.id.localeCompare(b.id));
 }
 
 interface ExternalDefaultDisabledOpts {
+  bundleIdentities?: BundleIdentities;
   /** 测试/裁剪部署可显式提供包名 → canonical id 映射，模拟注册表不可读。 */
   packageIds?: ReadonlyMap<string, string>;
   /** profile 的 dsh.profile.bundles（市场 / dsh plugin add 装入的包名）。 */
@@ -333,6 +359,14 @@ function externalDefaultDisabledPlan(o: ExternalDefaultDisabledOpts = {}): Array
     // 与原始包名两边匹配，保留「配套插件不进默认禁用」的既有语义。
     if (skipIds.has(id) || skipIds.has(name)) continue;
     if (distributionClassOf(id, 'other', distributionClasses, builtinIds, recommendedIds) !== 'external') continue;
+    const identity = o.bundleIdentities?.[name];
+    if (o.bundleIdentities) {
+      // A package identifier is a UI key, never an inferred loader entry ID.
+      if (!identity?.ok || identity.entryIds.some((entryId) => isRegistered(entryId) || skipIds.has(entryId))) continue;
+      seen.add(id);
+      for (const entry of identity.entries) out.push({ id: entry.id, name: entry.name });
+      continue;
+    }
     if (isRegistered(id)) continue;
     seen.add(id);
     out.push({ id, name });

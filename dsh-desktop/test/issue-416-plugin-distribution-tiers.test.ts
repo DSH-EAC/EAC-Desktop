@@ -349,9 +349,10 @@ test('plugin-ops feeds the ledger classes into rows and keeps builtin toggles re
   has(opsSource, /CORE_PLUGIN_IDS\.has\(id\)[\s\S]{0,120}核心插件不可停用/, '内置（核心）插件的停用拒绝必须保留');
 });
 
-test('companion-sync applies the external default-disable plan through the existing patch path', () => {
+test('companion-sync applies external defaults through shared YAML identity handling', () => {
   has(syncSource, /externalDefaultDisabledPlan/, 'companion-sync 必须消费默认禁用规划');
-  has(syncSource, /togglePluginInPatch\(patch, ext\.id, false, ext\.name\)/, '默认禁用必须复用既有 patch 手术（不新增安装器）');
+  has(syncSource, /registeredPatchEntryIds\(patch\)/, '用户选择必须按 YAML 条目读取');
+  has(syncSource, /toggleBundleInPatch\(patch,/, '默认禁用必须复用包启停的 YAML 写入路径');
   has(syncSource, /默认关闭（可在「设置 → 插件 → 管理」启用）/, '默认禁用需要可诊断的启动日志');
 });
 
@@ -375,8 +376,12 @@ test('plugin row model labels builtin/recommended/external', () => {
 test('market install path defaults non-shell-managed installs to disabled', () => {
   has(marketHost, /function isExternalInstall\(profile, pkgName\)/, '外部判定必须复用壳写入的内置清单标记');
   has(marketHost, /return !readBuiltinPlugins\(profile\)\.includes\(name\)/, '非壳同步面的包 = 外部插件');
-  has(marketHost, /const disabled = op\.kind === 'uninstall' \|\| isExternalInstall\(op\.profile, pkgName\)/,
-    '安装（外部包）默认禁用、卸载保持禁用');
+  has(marketHost, /installDefaultDisabled = isExternalInstall\(op\.profile, pkgName\)/,
+    '外部安装必须默认禁用');
+  has(marketHost, /installDefaultDisabled && !Object\.hasOwn\(op\.beforeDeps, pkgName\)/,
+    '更新必须保留用户启停选择');
+  has(marketHost, /togglePackage\(profileDir\(op\.profile\), pkgName, false\)/,
+    '禁用必须应用真实包条目；卸载由内核事务负责');
   has(marketHost, /外部插件默认禁用[\s\S]{0,80}设置 → 插件 → 管理/, '安装输出必须告知默认禁用与手动启用位置');
   has(marketHost, /hotCtx !== null && !installDefaultDisabled/, '默认禁用的外部插件不得热挂载（否则绕过关闭行立即生效）');
 });

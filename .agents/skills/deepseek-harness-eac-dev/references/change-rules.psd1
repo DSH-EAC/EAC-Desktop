@@ -1,4 +1,4 @@
-@{
+﻿@{
     SchemaVersion = 1
     Rules = @(
         @{
@@ -8,7 +8,7 @@
             Reference = 'references/tauri-shell.md'
             Level = 'runtime'
             Tests = @('test/bridge-preload-parity.test.ts')
-            Smoke = @('cd tauri-shell; cargo run -- --bridge-test', 'node gui-smoke.js')
+            Smoke = @('cd tauri-shell; cargo run -- --bridge-test', 'MANUAL: exercise GUI settings, overlays and window lifecycle in the current desktop build (legacy gui-smoke.js retired)')
         },
         @{
             Name = 'sidecar-bridge'
@@ -26,16 +26,14 @@
             Reference = 'references/updates-and-packaging.md'
             Level = 'package'
             Tests = @(
-                'test/client-update-platform.test.ts',
-                'test/client-updater-apply.test.ts',
-                'test/client-updater-asset.test.ts',
-                'test/client-updater-hash.test.ts',
-                'test/client-updater-node-arg.test.ts',
-                'test/client-updater-nospace.test.ts',
                 'test/client-updater-proxy.test.ts',
-                'test/client-updater-resume.test.ts'
+                'test/runtime-overlay-health.test.ts',
+                'test/bridge-preload-parity.test.ts'
             )
-            Smoke = @('node update-smoke.js')
+            Smoke = @(
+                'MANUAL: exercise release update and rollback with real packages (legacy update-smoke.js retired)',
+                'MANUAL: exercise update download, apply, failure and recovery with the current release mechanism; legacy native updater harnesses are retired'
+            )
         },
         @{
             Name = 'agent-update'
@@ -44,11 +42,12 @@
             Reference = 'references/updates-and-packaging.md'
             Level = 'full'
             Tests = @(
-                'test/updater-backup.test.ts',
-                'test/updater-version.test.ts',
-                'test/update-mirror-chain.test.ts'
+                'test/runtime-overlay-health.test.ts',
+                'test/kernel-pin-consistency.test.ts'
             )
-            Smoke = @()
+            Smoke = @(
+                'MANUAL: verify kernel update backup, version selection and rollback with an isolated profile'
+            )
         },
         @{
             Name = 'dependency-patches'
@@ -82,12 +81,11 @@
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
             Tests = @(
-                'test/skin-chrome-zindex.test.ts',
-                'test/skin-switch-css.test.ts',
-                'test/skin-switch-profile.test.ts',
-                'test/widget-theme.test.ts'
+                'test/issue-415-legacy-ui-skin-migration.test.ts',
+                'test/issue-415-skin-switch-retirement.test.ts',
+                'test/stage-7-canonical-source.test.ts'
             )
-            Smoke = @('node gui-smoke.js')
+            Smoke = @('MANUAL: exercise GUI settings, overlays and window lifecycle in the current desktop build (legacy gui-smoke.js retired)')
         },
         @{
             Name = 'shell-skins'
@@ -95,8 +93,12 @@
             Pattern = '^dsh-desktop/assets/shell-skin/'
             Reference = 'references/tauri-shell.md'
             Level = 'targeted'
-            Tests = @('test/shell-skin-pack.test.ts')
-            Smoke = @()
+            Tests = @(
+                'test/stage-7-canonical-source.test.ts'
+            )
+            Smoke = @(
+                'MANUAL: confirm retired AIO/shell-skin sources remain absent; visual changes belong in the canonical Skin repository'
+            )
         },
         @{
             Name = 'bundled-skills'
@@ -105,7 +107,7 @@
             Reference = 'references/presets-and-profile.md'
             Level = 'full'
             Tests = @()
-            Smoke = @('node boot-smoke.js')
+            Smoke = @('MANUAL: exercise sidecar boot, restart and exit with a temporary profile (legacy boot-smoke.js retired)')
         },
         @{
             Name = 'openclaw-bridge'
@@ -114,7 +116,9 @@
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
             Tests = @()
-            Smoke = @('node --test openclaw-dsh-bridge/test/bridge.test.mjs')
+            Smoke = @(
+                'MANUAL: run the external OpenClaw package tests in its owning repository; it is no longer bundled here'
+            )
         },
         @{
             Name = 'plugin-update'
@@ -122,8 +126,12 @@
             Pattern = 'plugin-updater\.(js|ts)$'
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
-            Tests = @('test/plugin-updater.test.ts')
-            Smoke = @()
+            Tests = @(
+                'test/plugin-conflict-scan.test.ts'
+            )
+            Smoke = @(
+                'MANUAL: exercise plugin update success and rollback with a temporary profile'
+            )
         },
         @{
             Name = 'companion-sync'
@@ -133,11 +141,10 @@
             Level = 'full'
             Tests = @(
                 'test/companion-copy-integrity.test.ts',
-                'test/companion-plugins-registry.test.ts',
-                'test/better-sidebar-bundle.test.ts',
-                'test/patch-row-heal.test.ts',
-                'test/retired-market-migration.test.ts',
-                'test/dsh-compact-integration.test.ts'
+                'test/retirement-cleanup.test.ts',
+                'test/issue-415-legacy-ui-skin-migration.test.ts',
+                'test/issue-416-plugin-distribution-tiers.test.ts',
+                'test/kernel-service-compat.test.ts'
             )
             Smoke = @()
         },
@@ -149,23 +156,24 @@
             Level = 'full'
             Tests = @(
                 'test/companion-copy-integrity.test.ts',
-                'test/plugin-copy-stamp.test.ts'
+                'test/plugin-sync-eol-independence.test.ts'
             )
             Smoke = @()
         },
         @{
             Name = 'plugin-ops'
             Domain = 'plugins'
-            Pattern = 'plugin-ops\.(ts|js)$|plugin-manager-state|scripts/onboarding|scripts/plugin-manager-patch'
+            Pattern = 'plugin-ops\.(ts|js)$|plugin-manager-state|scripts/onboarding|scripts/plugin-manager-patch|^dsh-desktop/lib/bundle-identity\.(ts|js)$'
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
             Tests = @(
-                'test/plugin-manager-state.test.ts',
-                'test/plugin-manager-toggle.test.ts',
-                'test/onboarding-selection.test.ts',
-                'test/image-paste-core.test.ts'
+                'test/bundle-identity.test.ts',
+                'test/issue-416-plugin-distribution-tiers.test.ts',
+                'test/plugin-conflict-scan.test.ts'
             )
-            Smoke = @()
+            Smoke = @(
+                'MANUAL: verify enable/disable/remove and persisted choice after restart with an installed community bundle'
+            )
         },
         @{
             Name = 'plugin-package'
@@ -174,10 +182,10 @@
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
             Tests = @(
-                'test/companion-plugins-registry.test.ts',
+                'test/market-bundle-identity.test.ts',
                 'test/companion-copy-integrity.test.ts',
-                'test/plugin-slot-registration.test.ts',
-                'test/onboarding-selection.test.ts'
+                'test/issue-416-plugin-distribution-tiers.test.ts',
+                'test/kernel-service-compat.test.ts'
             )
             Smoke = @('node tauri-shell/stage-resources.mjs')
         },
@@ -189,8 +197,8 @@
             Level = 'package'
             Tests = @(
                 'test/bundled-files.test.ts',
-                'test/raw-html-integration.test.ts',
-                'test/raw-html-sanitize.test.ts'
+                'test/dependency-security-overrides.test.ts',
+                'test/kernel-pin-consistency.test.ts'
             )
             Smoke = @('node tauri-shell/stage-resources.mjs')
         },
@@ -201,14 +209,12 @@
             Reference = 'references/dsh-plugins.md'
             Level = 'full'
             Tests = @(
-                'test/dsh-compact-engine.test.ts',
-                'test/dsh-compact-host.test.ts',
-                'test/dsh-compact-integration.test.ts',
-                'test/dsh-compact-migration.test.ts',
-                'test/dsh-compact-output-overflow.test.ts',
-                'test/dsh-compact-policy.test.ts'
+                'test/compact-configform-write-feedback.test.ts',
+                'test/kernel-service-compat.test.ts'
             )
-            Smoke = @()
+            Smoke = @(
+                'MANUAL: exercise automatic compaction, overflow recovery and preset migration on an isolated session'
+            )
         },
         @{
             Name = 'presets-profile'
@@ -217,12 +223,13 @@
             Reference = 'references/presets-and-profile.md'
             Level = 'full'
             Tests = @(
-                'test/preset-sync.test.ts',
-                'test/patch-row-heal.test.ts',
-                'test/resolve-profile.test.ts',
-                'test/profile-module-heal.test.ts'
+                'test/credentials-heal.test.ts',
+                'test/kernel-service-compat.test.ts'
             )
-            Smoke = @('node boot-smoke.js')
+            Smoke = @(
+                'MANUAL: exercise sidecar boot, restart and exit with a temporary profile (legacy boot-smoke.js retired)',
+                'MANUAL: verify profile initialization and preset/patch migration are idempotent and preserve custom entries'
+            )
         },
         @{
             Name = 'shortcuts'
@@ -230,7 +237,10 @@
             Pattern = 'shortcuts\.(ts|js)$|shortcut-maintenance'
             Reference = 'references/presets-and-profile.md'
             Level = 'full'
-            Tests = @('test/shortcut-maintenance.test.ts')
+            Tests = @(
+                'test/bridge-preload-parity.test.ts',
+                'test/l1-native-actions.test.ts'
+            )
             Smoke = @()
         },
         @{
@@ -240,11 +250,12 @@
             Reference = 'references/product-services.md'
             Level = 'full'
             Tests = @(
-                'test/balance-prices-core.test.ts',
-                'test/pricing-window.test.ts',
-                'test/widget-theme.test.ts'
+                'test/minimal-core-boundary.test.ts',
+                'test/bridge-preload-parity.test.ts'
             )
-            Smoke = @()
+            Smoke = @(
+                'MANUAL: verify pricing, theme and enable/disable behavior in the external balance plugin; do not restore retired core features'
+            )
         },
         @{
             Name = 'session-notify'
@@ -253,7 +264,7 @@
             Reference = 'references/product-services.md'
             Level = 'runtime'
             Tests = @()
-            Smoke = @('node gui-smoke.js')
+            Smoke = @('MANUAL: exercise GUI settings, overlays and window lifecycle in the current desktop build (legacy gui-smoke.js retired)')
         },
         @{
             Name = 'file-preview'
@@ -264,7 +275,7 @@
             Tests = @(
                 'test/bundle-integrity.test.ts',
                 'test/bundled-files.test.ts',
-                'test/image-paste-core.test.ts'
+                'test/l1-native-actions.test.ts'
             )
             Smoke = @()
         },
@@ -278,7 +289,7 @@
                 'test/stable-port.test.ts',
                 'test/stream-write-after-end.test.ts',
                 'test/koffi-preflight.test.ts',
-                'test/builtin-collision.test.ts',
+                'test/plugin-conflict-scan.test.ts',
                 'test/bundle-integrity.test.ts'
             )
             Smoke = @()
@@ -290,17 +301,14 @@
             Reference = 'references/reliability-and-security.md'
             Level = 'full'
             Tests = @(
-                'test/boot-attribution.test.ts',
-                'test/diagnostics-zip.test.ts',
-                'test/logger-redact.test.ts',
-                'test/logger-rotate.test.ts',
-                'test/plugin-guard.test.ts',
-                'test/recovery-integration.test.ts',
-                'test/rescue-agent.test.ts',
-                'test/rescue-auto-repair.test.ts',
-                'test/rescue-integration.test.ts'
+                'test/atomic-write.test.ts',
+                'test/runtime-overlay-health.test.ts',
+                'test/settings-write-recovery.test.ts',
+                'test/minimal-core-boundary.test.ts'
             )
-            Smoke = @()
+            Smoke = @(
+                'MANUAL: exercise the changed failure/recovery path and verify logs redact secrets'
+            )
         },
         @{
             Name = 'packaging'
@@ -316,7 +324,7 @@
                 'test/installer-takeover.test.ts',
                 'test/verify-dist-fresh.test.ts'
             )
-            Smoke = @('node update-smoke.js')
+            Smoke = @('MANUAL: exercise release update and rollback with real packages (legacy update-smoke.js retired)')
         },
         @{
             Name = 'electron-fallback'
@@ -327,7 +335,7 @@
             Tests = @(
                 'test/bridge-preload-parity.test.ts',
                 'test/bundled-files.test.ts',
-                'test/desktop-extras.test.ts'
+                'test/minimal-core-boundary.test.ts'
             )
             Smoke = @()
         },
