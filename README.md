@@ -302,7 +302,6 @@ EAC 使用 [MIT License](LICENSE)。感谢 [DeepSeek Harness](https://github.com
 
 ---
 
-<div align="center"><sub>Embracing All Creation · 精简本体，容纳更多可能。</sub></div>
 
 ## Star 趋势
 
@@ -313,3 +312,5 @@ EAC 使用 [MIT License](LICENSE)。感谢 [DeepSeek Harness](https://github.com
 <img alt="Star History" src="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" width="960" />
 </picture>
 </a>
+
+<div align="center"><sub>Embracing All Creation </sub></div>
