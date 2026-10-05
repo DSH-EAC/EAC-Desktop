@@ -16,7 +16,6 @@
 
 <div align="center">
 
-**🚀 全新产品：[Deepseek Harness EAC IDE](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE) —— 内置 EAC 的独立 IDE · 开箱即用 · [前往下载 →](https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC-IDE/releases)**
 
 封装了官方[deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)，**开箱即用的桌面客户端**。
 在其之上拥抱社区万象：皮肤、插件、工具、记忆——**你所能想到的，一切皆可装**。
