@@ -36,7 +36,7 @@ contains only the minimum recovery styles, not a second default package source.
 ## License and aggregation
 
 The canonical default-skins repository owns the default Skin MIT license,
-`Copyright (c) 2026 zouyuxuan122`, its empty third-party inventory, and any
+`Copyright (c) 2026 Ebony-Vinyl`, its empty third-party inventory, and any
 future real NOTICE obligations. EAC's top-level MIT license continues to cover
 EAC code; the staged default artifact remains accompanied by its locked source,
 provenance and digest. EAC release notes and bundle manifests must identify the

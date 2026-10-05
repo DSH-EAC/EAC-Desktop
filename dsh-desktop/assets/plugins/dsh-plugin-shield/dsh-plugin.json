@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/Yan-Zero/dsh-std/614dfa1ac168db79fcf4577cf0ebb34e2e3b944b/packages/manifest/schema/dsh-plugin-0.15.schema.json",
   "manifestVersion": "0.15",
-  "id": "io.github.zouyuxuan122.dsh-desktop-eac.dsh-plugin-shield",
+  "id": "io.github.Ebony-Vinyl.dsh-desktop-eac.dsh-plugin-shield",
   "name": "dsh-plugin-shield",
   "version": "0.1.0",
   "facets": {
@@ -20,7 +20,7 @@
   "subscriptions": [],
   "license": "MIT",
   "source": {
-    "repository": "https://github.com/zouyuxuan122/DSH-Desktop-EAC"
+    "repository": "https://github.com/Ebony-Vinyl/DSH-Desktop-EAC"
   },
   "overrides": [],
   "x-eac": {

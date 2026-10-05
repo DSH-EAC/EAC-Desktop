@@ -79,7 +79,7 @@ export function genDistributionDescriptor({ ddRoot, stagedOut }) {
   // 内核/壳组件保持（发行物本体；其余组件以「真实在包」为准过滤）。
   const components = [
     { id: 'runtime', ref: `pkg:npm/@deepseek-ai/dsh@${kernelVersion}`, note: 'DeepSeek Harness 内核（vendored tarball，禁止改动）' },
-    { id: 'shell', ref: `pkg:github/zouyuxuan122/DSH-Desktop-EAC@v${appVersion}`, dependsOn: ['runtime'], note: 'Tauri 2 桌面壳 + sidecar' },
+    { id: 'shell', ref: `pkg:github/Ebony-Vinyl/DSH-Desktop-EAC@v${appVersion}`, dependsOn: ['runtime'], note: 'Tauri 2 桌面壳 + sidecar' },
   ];
   const builtinPluginDirs = stagedBuiltinPluginDirs();
   const repoRoot = path.dirname(ddRoot); // 台账 path 为仓库根相对（`dsh-desktop/...`）
@@ -108,7 +108,7 @@ export function genDistributionDescriptor({ ddRoot, stagedOut }) {
   const descriptor = {
     apiVersion: 'distribution.dsh.dev/v1alpha1',
     kind: 'DistributionDescriptor',
-    distribution: { id: 'urn:github:zouyuxuan122:dsh-desktop-eac', version: appVersion },
+    distribution: { id: 'urn:github:Ebony-Vinyl:dsh-desktop-eac', version: appVersion },
     displayName: 'Deepseek Harness EAC（全量/精简双形态，Tauri 2）',
     protocols: [
       {

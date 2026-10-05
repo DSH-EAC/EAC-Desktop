@@ -33,7 +33,7 @@ const ledger = JSON.parse(readFileSync(join(ddRoot, 'assets', 'SOURCES.json'), '
 const SCHEMA_PIN = 'https://raw.githubusercontent.com/Yan-Zero/dsh-std/614dfa1ac168db79fcf4577cf0ebb34e2e3b944b/packages/manifest/schema/dsh-plugin-0.15.schema.json';
 // eac-original 的来源归属：审计口径「best match = EAC 主仓库」（外部匹配审计
 // PLUGIN-MATCH-REPORT 中这些行置信 0.94–0.97 均指向主仓库本体）。
-const EAC_REPO = 'https://github.com/zouyuxuan122/DSH-Desktop-EAC';
+const EAC_REPO = 'https://github.com/Ebony-Vinyl/DSH-Desktop-EAC';
 const DRY = process.argv.includes('--dry');
 const idsArg = process.argv.findIndex((a) => a === '--ids');
 const onlyIds = idsArg >= 0 ? new Set(process.argv[idsArg + 1].split(',')) : null;
