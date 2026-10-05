@@ -2,12 +2,20 @@
 
 <h1><img src="docs/assets/eac-readme-hero.svg" alt="EAC-Desktop" width="808" /></h1>
 
-[Download](https://github.com/DSH-EAC/EAC-Desktop/releases) · [Quick start](#quick-start) · [Capabilities](#capabilities) · [Architecture](#architecture) · [Development](#development) · [中文](README.md)
+**_EAC = Embracing All Creation（揽尽万象）_**
 
-[![Release](https://img.shields.io/github/v/release/DSH-EAC/EAC-Desktop?style=flat-square&label=release&color=4b6fff)](https://github.com/DSH-EAC/EAC-Desktop/releases)
-[![Tauri](https://img.shields.io/badge/Tauri-2-5e88cc?style=flat-square)](tauri-shell/Cargo.toml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Node.js-5e88cc?style=flat-square)](dsh-desktop/package.json)
-[![License](https://img.shields.io/badge/license-MIT-628268?style=flat-square)](LICENSE)
+[中文](README.md) | [English](README.en.md)
+
+[![Stars](https://img.shields.io/github/stars/DSH-EAC/EAC-Desktop?style=for-the-badge&label=Star&color=4b6fff)](https://github.com/DSH-EAC/EAC-Desktop)
+[![MIT License](https://img.shields.io/badge/license-MIT-2ea44f?style=for-the-badge)](LICENSE)
+
+[![QQ](https://img.shields.io/badge/QQ-1083832019-blue?logo=qq)](https://qm.qq.com/q/vqXxQQ3rmo)
+[![Discord](https://img.shields.io/badge/Discord-DSH--EAC-5865f2?logo=discord)](https://discord.com/invite/kY48Ah8h)
+
+[![Trendshift daily](https://trendshift.io/api/badge/trendshift/repositories/158075/daily?language=JavaScript)](https://trendshift.io/repositories/158075)
+[![Trendshift weekly](https://trendshift.io/api/badge/trendshift/repositories/158075/weekly?language=JavaScript)](https://trendshift.io/repositories/158075)
+
+[Download](https://github.com/DSH-EAC/EAC-Desktop/releases) · [Quick start](#quick-start) · [Architecture](#architecture) · [Community](#community-and-support)
 
 </div>
 
@@ -36,16 +44,23 @@ Model requests use your configured provider. Activation, compatibility and addit
 
 ### Download and launch
 
-Choose a package from [Releases](https://github.com/DSH-EAC/EAC-Desktop/releases):
+Latest stable Windows release: **v6.0.0**. Other platforms link to the most recent published package for each listed format.
 
-| Format | Usage |
-| --- | --- |
-| Windows Setup | Install through the setup wizard |
-| Windows portable | Fully extract into a stable directory before launching |
-| Linux AppImage | Grant executable permission and run |
-| Linux deb / rpm | Install with your distribution's package manager |
+| Platform | Version | Download | Updated (UTC+8) |
+| --- | --- | --- | --- |
+| Windows x64 | v6.0.0 | [Full Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-Setup-x64.exe) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Full Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-x64-portable.zip) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Lite Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-Setup-x64.exe) | 2026-10-05 00:49 |
+| Windows x64 | v6.0.0 | [Lite Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-x64-portable.zip) | 2026-10-05 00:49 |
+| Linux x64 | v5.3.6 | [AppImage](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage) | 2026-09-03 19:30 |
+| Linux x64 | v5.3.6 | [deb](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb) | 2026-09-03 19:30 |
+| Linux x64 | v4.4.0-linux | [rpm](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0.x86_64.rpm) | 2026-08-19 19:13 |
+| macOS arm64 | v5.1.0 | [dmg](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg) | 2026-08-27 15:12 |
+| macOS arm64 | v5.1.0 | [app.zip](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | 2026-08-27 15:12 |
 
-Consult the release for available files, architectures, full/lite variants and checksums. Windows requires WebView2, which the installer can download. Cloud model calls require network access and provider credentials.
+[Release notes](https://github.com/DSH-EAC/EAC-Desktop/releases/tag/v6.0.0) · [SHA256SUMS.txt](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/SHA256SUMS.txt)
+
+Update times are GitHub asset update timestamps. Platform packages may belong to different release generations; consult their release notes before installation. Windows uses WebView2; cloud models require network access and provider credentials.
 
 1. **Launch the application** and wait for the local dsh service and Web UI.
 2. **Configure your model**, including provider and API key.
@@ -68,7 +83,7 @@ Get-FileHash -LiteralPath '<downloaded-file-path>' -Algorithm SHA256
 
 **One desktop entry point. Three distinct responsibilities.** EAC separates operating-system integration, runtime orchestration and the agent kernel so that desktop experience and extensions can evolve independently.
 
-![EAC architecture: Tauri drives the Node sidecar through RPC; DPX prepares the runtime environment for services and the official dsh kernel](docs/assets/eac-readme-architecture.svg)
+![EAC architecture: Tauri drives the Node sidecar through RPC; DPX prepares the runtime environment for services and the official dsh kernel](docs/assets/eac-runtime-flow.svg)
 
 | Layer | Responsibility | Entry point |
 | --- | --- | --- |
@@ -234,6 +249,51 @@ Startup, bridge, environment and packaging changes also require relevant runtime
 - [Ecosystem credits](docs/ECOSYSTEM-CREDITS.md): plugin authors, skin sources and license records.
 
 Include the application version, operating system, package format, reproduction steps and redacted logs in bug reports to help trace environment and runtime behavior.
+
+## Community and support
+
+Discuss workflows, plugins and troubleshooting with the community.
+
+| Channel | Join |
+| --- | --- |
+| QQ | [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) |
+| Discord | [DSH-EAC](https://discord.com/invite/kY48Ah8h) |
+| Bug reports | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
+
+<table><tr><td align="center"><img src="docs/qq-group-qrcode.jpg" alt="QQ group QR code" width="260" /></td><td align="center"><img src="docs/wechat-group-qrcode.jpg" alt="WeChat group QR code" width="260" /></td></tr><tr><td align="center">QQ · 1083832019</td><td align="center">WeChat group</td></tr></table>
+
+## Contributors and acknowledgements
+
+Thank you to the developers who contribute code, platform support, plugins and documentation to EAC.
+
+<table>
+<tr>
+<td align="center" width="25%"><a href="https://github.com/Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=80" width="64" height="64" alt="Ebony-Vinyl" /><br />Ebony-Vinyl</a></td>
+<td align="center" width="25%"><a href="https://github.com/metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=80" width="64" height="64" alt="metaone01" /><br />metaone01</a></td>
+<td align="center" width="25%"><a href="https://github.com/jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=80" width="64" height="64" alt="jing-hy" /><br />jing-hy</a></td>
+<td align="center" width="25%"><a href="https://github.com/zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=80" width="64" height="64" alt="zixin947" /><br />zixin947</a></td>
+</tr>
+<tr>
+<td align="center" width="25%"><a href="https://github.com/says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=80" width="64" height="64" alt="says693" /><br />says693</a></td>
+<td align="center" width="25%"><a href="https://github.com/dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=80" width="64" height="64" alt="dtyg123" /><br />dtyg123</a></td>
+<td align="center" width="25%"><a href="https://github.com/lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=80" width="64" height="64" alt="lanyun077" /><br />lanyun077</a></td>
+<td align="center" width="25%"><a href="https://github.com/BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=80" width="64" height="64" alt="BAIKAI23333" /><br />BAIKAI23333</a></td>
+</tr>
+<tr>
+<td align="center" width="25%"><a href="https://github.com/nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=80" width="64" height="64" alt="nishantpurohit04" /><br />nishantpurohit04</a></td>
+<td align="center" width="25%"><a href="https://github.com/ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=80" width="64" height="64" alt="ViscaOwO" /><br />ViscaOwO</a></td>
+<td align="center" width="25%"><a href="https://github.com/jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=80" width="64" height="64" alt="jiang8297" /><br />jiang8297</a></td>
+<td align="center" width="25%"><a href="https://github.com/Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=80" width="64" height="64" alt="Luoye-hb" /><br />Luoye-hb</a></td>
+</tr>
+<tr>
+<td align="center" width="25%"><a href="https://github.com/look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=80" width="64" height="64" alt="look-back-lysj" /><br />look-back-lysj</a></td>
+<td align="center" width="25%"><a href="https://github.com/T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=80" width="64" height="64" alt="T-Auto" /><br />T-Auto</a></td>
+<td align="center" width="25%"><a href="https://github.com/maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=80" width="64" height="64" alt="maliang233" /><br />maliang233</a></td>
+<td align="center" width="25%"><a href="https://github.com/lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=80" width="64" height="64" alt="lbn2011" /><br />lbn2011</a></td>
+</tr>
+</table>
+
+Special thanks to [@Nuomi9](https://github.com/Nuomi9) for the macOS port ([PR #234](https://github.com/DSH-EAC/EAC-Desktop/pull/234)). Plugin and skin authors are recorded in [ecosystem credits](docs/ECOSYSTEM-CREDITS.md).
 
 ## License and acknowledgements
 
