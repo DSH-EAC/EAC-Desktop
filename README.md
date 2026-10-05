@@ -1,6 +1,6 @@
 <div align="center">
 
-<h1>DSH-Desktop-EAC — 揽尽万象</h1>
+<h1><img src="docs/assets/EAC-Desktop.svg" alt="DSH-Desktop-EAC — 揽尽万象" width="808" /></h1>
 
 **_EAC = Embracing All Creation（揽尽万象）_**
 
