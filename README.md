@@ -19,7 +19,7 @@
 
 </div>
 
-**励志熔铸数百个插件。**
+**励志熔铸数百插件为一。**
 
 Deepseek Harness EAC 是基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的开源第三方桌面插件整合工作台
 
@@ -56,13 +56,6 @@ Windows 最新稳定版：**v6.0.0**。其余平台按包格式列出最近发�
 
 [发布说明](https://github.com/DSH-EAC/EAC-Desktop/releases/tag/v6.0.0) · [SHA256SUMS.txt](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/SHA256SUMS.txt)
 
-更新时间取自 GitHub 文件更新记录。不同平台安装包可能属于不同代际，安装前请阅读对应版本说明。Windows 依赖 WebView2；云端模型调用需要网络与提供商凭据。
-
-1. **启动应用**，等待本地 dsh 服务就绪并进入 Web UI。
-2. **配置模型**，填写提供商与 API Key。
-3. **选择工作目录**，描述任务，让 Agent 在项目上下文中执行。
-4. **检查结果**，结合会话输出与文件变更视图审阅修改。
-5. **按需扩展**，从插件市场选择适合工作流的能力。
 
 <details>
 <summary>校验下载文件</summary>
