@@ -29,17 +29,9 @@ Deepseek Harness EAC is an open-source desktop workspace built on [DeepSeek Harn
 
 ## Contents
 
-- [Capabilities](#capabilities)
-- [Quick start](#quick-start)
-- [Architecture](#architecture)
-- [Plugins and appearance](#plugins-and-appearance)
-- [Data and environments](#data-and-environments)
-- [Development](#development)
-- [Documentation and community](#documentation-and-community)
-- [Community and support](#community-and-support)
-- [Contributors and acknowledgements](#contributors-and-acknowledgements)
-- [License and acknowledgements](#license-and-acknowledgements)
-- [Star history](#star-history)
+| Get started | Architecture & extensions | Development & community |
+| :--- | :--- | :--- |
+| [Capabilities](#capabilities)<br />[Quick start](#quick-start)<br />[Download and launch](#download-and-launch)<br />[Data and environments](#data-and-environments) | [Architecture](#architecture)<br />[From launch to execution](#from-launch-to-execution)<br />[Keep complexity within explicit boundaries](#keep-complexity-within-explicit-boundaries)<br />[Plugins and appearance](#plugins-and-appearance)<br />[Desktop companion capabilities](#desktop-companion-capabilities)<br />[Extension distribution](#extension-distribution)<br />[Skin contracts](#skin-contracts) | [Development](#development)<br />[Repository map](#repository-map)<br />[Documentation and community](#documentation-and-community)<br />[Community and support](#community-and-support)<br />[Contributors and acknowledgements](#contributors-and-acknowledgements)<br />[License and acknowledgements](#license-and-acknowledgements)<br />[Star history](#star-history) |
 
 ## Capabilities
 
