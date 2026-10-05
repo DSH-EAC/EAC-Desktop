@@ -10,6 +10,8 @@
 
 [![QQ](https://img.shields.io/badge/QQ-1083832019-blue?style=plastic&logo=qq&logoSize=auto&link=https://qm.qq.com/q/vqXxQQ3rmo)](https://qm.qq.com/q/vqXxQQ3rmo) [![Discord](https://img.shields.io/badge/DISCORD-DSH--EAC-blue?style=plastic&logo=discord&logoSize=auto&link=https://discord.com/invite/kY48Ah8h)](https://discord.com/invite/kY48Ah8h)
 
+[![DSH-EAC/EAC-Desktop | Trendshift daily](https://trendshift.io/api/badge/trendshift/repositories/158075/daily?language=JavaScript)](https://trendshift.io/repositories/158075) [![DSH-EAC/EAC-Desktop | Trendshift weekly](https://trendshift.io/api/badge/trendshift/repositories/158075/weekly?language=JavaScript)](https://trendshift.io/repositories/158075)
+
 </div>
 
 <div align="center">
