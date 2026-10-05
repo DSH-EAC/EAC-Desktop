@@ -1,12 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/eac-readme-hero.svg" alt="EAC：Tauri 桌面壳、Node 服务、官方 dsh 内核与 DPX 独立环境" width="920" />
-
-# Deepseek Harness EAC
-
-**让 Agent 工作在桌面，让扩展各就其位。**
-
-Embracing All Creation · 揽尽万象
+<h1><img src="docs/assets/eac-readme-hero.svg" alt="EAC-Desktop" width="808" /></h1>
 
 [下载上游发行版](https://github.com/DSH-EAC/EAC-Desktop/releases/latest) · [快速开始](#快速开始) · [功能与扩展](#功能与扩展) · [开发指南](#开发指南) · [English](README.en.md)
 

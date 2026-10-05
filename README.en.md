@@ -1,12 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/eac-readme-hero.svg" alt="EAC: Tauri desktop shell, Node services, official dsh kernel and DPX environments" width="920" />
-
-# Deepseek Harness EAC
-
-**Bring your agent to the desktop. Extend it on your terms.**
-
-Embracing All Creation · 揽尽万象
+<h1><img src="docs/assets/eac-readme-hero.svg" alt="EAC-Desktop" width="808" /></h1>
 
 [Download upstream release](https://github.com/DSH-EAC/EAC-Desktop/releases/latest) · [Quick start](#quick-start) · [Features](#features-and-extensions) · [Development](#development) · [中文](README.md)
 
