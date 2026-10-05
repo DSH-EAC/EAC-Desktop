@@ -221,7 +221,7 @@ DeepSeek Harness（dsh）的 Windows 桌面客户端：内置独立 Node 运行�
 
 ### 新增：应用内反馈入口（群友建议）
 - chrome 栏 ⋯ 菜单与托盘菜单新增「反馈建议…」，直达 GitHub Issues
-  （`https://github.com/zouyuxuan122/Deepseek-Harness-EAC/issues`）；
+  （`https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC/issues`）；
   「关于」对话框附交流群号（523412163）与反馈指引。
 
 ### 新增：拖文件进对话（群友建议，dsh-file-drop 配套插件）

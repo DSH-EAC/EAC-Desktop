@@ -1261,7 +1261,7 @@ async function askExitAction() {
 
 function repoUrls() {
   return {
-    github: 'https://github.com/zouyuxuan122/Deepseek-Harness-EAC',
+    github: 'https://github.com/Ebony-Vinyl/Deepseek-Harness-EAC',
     gitee: 'https://gitee.com/zouyuxuan122/Deepseek-Harness-EAC',
   };
 }

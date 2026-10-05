@@ -6,7 +6,7 @@
 
 | 组件 | 来源 | 许可证/状态 |
 | --- | --- | --- |
-| DSH-Desktop-EAC v4.5-lite 基线 | `zouyuxuan122/DSH-Desktop-EAC` | MIT；顶层 LICENSE 保留上游版权声明 |
+| DSH-Desktop-EAC v4.5-lite 基线 | `Ebony-Vinyl/DSH-Desktop-EAC` | MIT；顶层 LICENSE 保留上游版权声明 |
 | DeepSeek Harness / `@deepseek-ai/dsh` | `deepseek-ai/deepseek-harness` | MIT；包内 `node_modules/@deepseek-ai/dsh/LICENSE` 随源码提供 |
 | Tauri 2 及 Rust crates | Cargo.lock 所列项目 | 各自许可证；应使用 Cargo 工具生成完整清单 |
 | Node.js 与 npm CLI | `vendor/node`、`vendor/npm` | Node.js/npm 及其依赖各自许可证；发布前需保留上游 notices |
