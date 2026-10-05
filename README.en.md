@@ -25,6 +25,22 @@ Deepseek Harness EAC is an open-source desktop workspace built on [DeepSeek Harn
 
 **EAC · Embracing All Creation.** Open capabilities, clear boundaries: the shell owns the desktop experience, the service layer owns orchestration, Harness owns the agent, and extension packages open up new possibilities.
 
+<p align="center"><img src="docs/screenshot-preview.jpg" alt="EAC desktop skin preview" width="960" /><br /><sub>Skin showcase · appearance depends on the installed skin.</sub></p>
+
+## Contents
+
+- [Capabilities](#capabilities)
+- [Quick start](#quick-start)
+- [Architecture](#architecture)
+- [Plugins and appearance](#plugins-and-appearance)
+- [Data and environments](#data-and-environments)
+- [Development](#development)
+- [Documentation and community](#documentation-and-community)
+- [Community and support](#community-and-support)
+- [Contributors and acknowledgements](#contributors-and-acknowledgements)
+- [License and acknowledgements](#license-and-acknowledgements)
+- [Star history](#star-history)
+
 ## Capabilities
 
 | From intent to action | What EAC provides |
@@ -83,7 +99,7 @@ Get-FileHash -LiteralPath '<downloaded-file-path>' -Algorithm SHA256
 
 **One desktop entry point. Three distinct responsibilities.** EAC separates operating-system integration, runtime orchestration and the agent kernel so that desktop experience and extensions can evolve independently.
 
-![EAC architecture: Tauri drives the Node sidecar through RPC; DPX prepares the runtime environment for services and the official dsh kernel](docs/assets/eac-runtime-flow.svg)
+![EAC architecture: Tauri drives the Node sidecar through RPC; DPX prepares the runtime environment for services and the official dsh kernel](docs/assets/eac-runtime-flow-en.svg)
 
 | Layer | Responsibility | Entry point |
 | --- | --- | --- |
@@ -254,11 +270,9 @@ Include the application version, operating system, package format, reproduction 
 
 Discuss workflows, plugins and troubleshooting with the community.
 
-| Channel | Join |
-| --- | --- |
-| QQ | [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) |
-| Discord | [DSH-EAC](https://discord.com/invite/kY48Ah8h) |
-| Bug reports | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
+| QQ | Discord | Issue tracker |
+| :---: | :---: | :---: |
+| [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) | [DSH-EAC](https://discord.com/invite/kY48Ah8h) | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
 
 <table><tr><td align="center"><img src="docs/qq-group-qrcode.jpg" alt="QQ group QR code" width="260" /></td><td align="center"><img src="docs/wechat-group-qrcode.jpg" alt="WeChat group QR code" width="260" /></td></tr><tr><td align="center">QQ · 1083832019</td><td align="center">WeChat group</td></tr></table>
 
@@ -266,32 +280,32 @@ Discuss workflows, plugins and troubleshooting with the community.
 
 Thank you to the developers who contribute code, platform support, plugins and documentation to EAC.
 
-<table>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=80" width="64" height="64" alt="Ebony-Vinyl" /><br />Ebony-Vinyl</a></td>
-<td align="center" width="25%"><a href="https://github.com/metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=80" width="64" height="64" alt="metaone01" /><br />metaone01</a></td>
-<td align="center" width="25%"><a href="https://github.com/jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=80" width="64" height="64" alt="jing-hy" /><br />jing-hy</a></td>
-<td align="center" width="25%"><a href="https://github.com/zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=80" width="64" height="64" alt="zixin947" /><br />zixin947</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=80" width="64" height="64" alt="says693" /><br />says693</a></td>
-<td align="center" width="25%"><a href="https://github.com/dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=80" width="64" height="64" alt="dtyg123" /><br />dtyg123</a></td>
-<td align="center" width="25%"><a href="https://github.com/lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=80" width="64" height="64" alt="lanyun077" /><br />lanyun077</a></td>
-<td align="center" width="25%"><a href="https://github.com/BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=80" width="64" height="64" alt="BAIKAI23333" /><br />BAIKAI23333</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=80" width="64" height="64" alt="nishantpurohit04" /><br />nishantpurohit04</a></td>
-<td align="center" width="25%"><a href="https://github.com/ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=80" width="64" height="64" alt="ViscaOwO" /><br />ViscaOwO</a></td>
-<td align="center" width="25%"><a href="https://github.com/jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=80" width="64" height="64" alt="jiang8297" /><br />jiang8297</a></td>
-<td align="center" width="25%"><a href="https://github.com/Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=80" width="64" height="64" alt="Luoye-hb" /><br />Luoye-hb</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=80" width="64" height="64" alt="look-back-lysj" /><br />look-back-lysj</a></td>
-<td align="center" width="25%"><a href="https://github.com/T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=80" width="64" height="64" alt="T-Auto" /><br />T-Auto</a></td>
-<td align="center" width="25%"><a href="https://github.com/maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=80" width="64" height="64" alt="maliang233" /><br />maliang233</a></td>
-<td align="center" width="25%"><a href="https://github.com/lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=80" width="64" height="64" alt="lbn2011" /><br />lbn2011</a></td>
-</tr>
-</table>
+<div align="center">
+
+<p>
+<a href="https://github.com/Ebony-Vinyl" title="Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=128" width="64" height="64" alt="Ebony-Vinyl" /></a>
+<a href="https://github.com/metaone01" title="metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=128" width="64" height="64" alt="metaone01" /></a>
+<a href="https://github.com/jing-hy" title="jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=128" width="64" height="64" alt="jing-hy" /></a>
+<a href="https://github.com/zixin947" title="zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=128" width="64" height="64" alt="zixin947" /></a>
+<a href="https://github.com/says693" title="says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=128" width="64" height="64" alt="says693" /></a>
+<a href="https://github.com/dtyg123" title="dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=128" width="64" height="64" alt="dtyg123" /></a>
+<a href="https://github.com/lanyun077" title="lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=128" width="64" height="64" alt="lanyun077" /></a>
+<a href="https://github.com/BAIKAI23333" title="BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=128" width="64" height="64" alt="BAIKAI23333" /></a>
+</p>
+<p>
+<a href="https://github.com/nishantpurohit04" title="nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=128" width="64" height="64" alt="nishantpurohit04" /></a>
+<a href="https://github.com/ViscaOwO" title="ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=128" width="64" height="64" alt="ViscaOwO" /></a>
+<a href="https://github.com/jiang8297" title="jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=128" width="64" height="64" alt="jiang8297" /></a>
+<a href="https://github.com/Luoye-hb" title="Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=128" width="64" height="64" alt="Luoye-hb" /></a>
+<a href="https://github.com/look-back-lysj" title="look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=128" width="64" height="64" alt="look-back-lysj" /></a>
+<a href="https://github.com/T-Auto" title="T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=128" width="64" height="64" alt="T-Auto" /></a>
+<a href="https://github.com/maliang233" title="maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=128" width="64" height="64" alt="maliang233" /></a>
+<a href="https://github.com/lbn2011" title="lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=128" width="64" height="64" alt="lbn2011" /></a>
+</p>
+
+[Ebony-Vinyl](https://github.com/Ebony-Vinyl) · [metaone01](https://github.com/metaone01) · [jing-hy](https://github.com/jing-hy) · [zixin947](https://github.com/zixin947) · [says693](https://github.com/says693) · [dtyg123](https://github.com/dtyg123) · [lanyun077](https://github.com/lanyun077) · [BAIKAI23333](https://github.com/BAIKAI23333) · [nishantpurohit04](https://github.com/nishantpurohit04) · [ViscaOwO](https://github.com/ViscaOwO) · [jiang8297](https://github.com/jiang8297) · [Luoye-hb](https://github.com/Luoye-hb) · [look-back-lysj](https://github.com/look-back-lysj) · [T-Auto](https://github.com/T-Auto) · [maliang233](https://github.com/maliang233) · [lbn2011](https://github.com/lbn2011)
+
+</div>
 
 Special thanks to [@Nuomi9](https://github.com/Nuomi9) for the macOS port ([PR #234](https://github.com/DSH-EAC/EAC-Desktop/pull/234)). Plugin and skin authors are recorded in [ecosystem credits](docs/ECOSYSTEM-CREDITS.md).
 
@@ -304,3 +318,13 @@ Third-party components retain their own copyrights and licenses. Skin sources in
 ---
 
 <div align="center"><sub>Embracing All Creation · A focused core, room for more.</sub></div>
+
+## Star history
+
+<a href="https://www.star-history.com/#DSH-EAC/EAC-Desktop&amp;Date">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date&amp;theme=dark" />
+<source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" />
+<img alt="Star History" src="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" width="960" />
+</picture>
+</a>

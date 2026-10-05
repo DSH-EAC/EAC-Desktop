@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+<title id="title">EAC · 桌面运行流程</title><desc id="desc">Launch the Tauri shell, start the Node sidecar, initialize DPX, 准备 profiles and plugins, launch dsh, and present the Web UI. Initialization failure stops startup. 桌面操作通过桥接层返回宿主.</desc>
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4" orient="auto"><path d="M1 1L8 4L1 7" fill="none" stroke="#9bb7e3" stroke-width="1.6"/></marker></defs>
+<rect width="1000" height="620" rx="18" fill="#0f1420"/>
+<g font-family="Microsoft YaHei,Segoe UI,Arial,sans-serif">
+<rect x="34" y="35" width="10" height="10" fill="#4b6fff"/><text x="58" y="48" fill="#e8e6e0" font-size="25" font-weight="700">EAC / 架构与运行流程</text><text x="34" y="77" fill="#abc2ec" font-size="14">原生桌面壳 → 独立运行环境 → Harness 工作台</text>
+<g stroke="#5e88cc" fill="#182137"><rect x="34" y="120" width="265" height="100" rx="12"/><rect x="366" y="120" width="265" height="100" rx="12"/><rect x="699" y="120" width="267" height="100" rx="12"/></g>
+<g fill="#e8e6e0" font-size="21" font-weight="600"><text x="55" y="156">01 · Tauri 桌面壳</text><text x="387" y="156">02 · Node 服务进程</text><text x="720" y="156">03 · DPX 独立环境</text></g>
+<g fill="#abc2ec" font-size="14"><text x="55" y="184">窗口 · 托盘 · 单实例</text><text x="55" y="204">传递数据根与发布通道</text><text x="387" y="184">桌面服务 · RPC 分发</text><text x="387" y="204">读取配置前初始化运行环境</text><text x="720" y="184">创建或复用环境</text><text x="720" y="204">应用路径与运行时变量</text></g>
+<g fill="none" stroke="#9bb7e3" stroke-width="2" marker-end="url(#arrow)"><path d="M300 170H359"/><path d="M632 170H692"/><path d="M832 220V330"/><path d="M699 380H638"/><path d="M366 380H306"/></g>
+<g fill="#abc2ec" font-size="12"><text x="306" y="156">stdio RPC</text><text x="640" y="156">准备</text><text x="844" y="276">就绪</text><text x="641" y="365">启动</text><text x="307" y="365">HTTP 就绪</text></g>
+<g stroke="#5e88cc" fill="#182137"><rect x="699" y="330" width="267" height="100" rx="12"/><rect x="366" y="330" width="265" height="100" rx="12"/><rect x="34" y="330" width="265" height="100" rx="12"/></g>
+<g fill="#e8e6e0" font-size="21" font-weight="600"><text x="720" y="366">04 · 配置与插件</text><text x="387" y="366">05 · Harness 内核</text><text x="55" y="366">06 · Web 工作台</text></g>
+<g fill="#abc2ec" font-size="14"><text x="720" y="394">web-desktop 配置环境</text><text x="720" y="414">同步桌面配套插件</text><text x="387" y="394">启动 dsh · 等待服务就绪</text><text x="387" y="414">智能体 · 工具 · 对话</text><text x="55" y="394">加载本地 Web UI</text><text x="55" y="414">审阅任务与文件变更</text></g>
+<rect x="366" y="247" width="265" height="54" rx="9" fill="#33222b" stroke="#cd8293"/><text x="386" y="280" fill="#f1b6c4" font-size="15">初始化失败 → 停止并记录错误</text><path d="M740 220V274H638" fill="none" stroke="#cd8293" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M166 330V270H20V104H498V120" fill="none" stroke="#6a87bb" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<rect x="34" y="470" width="932" height="110" rx="12" fill="#131d2c" stroke="#324665"/><text x="54" y="499" fill="#e8e6e0" font-size="17" font-weight="600">桌面操作通过桥接层返回宿主</text><text x="54" y="525" fill="#abc2ec" font-size="14">Web UI → 桥接层 → 服务进程 → 原生桌面壳 · 协议输出与诊断日志分离</text><text x="54" y="553" fill="#8c9bb5" font-size="13">DPX 管理默认路径与环境变量，不提供文件系统沙箱隔离。</text>
+</g></svg>

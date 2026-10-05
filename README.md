@@ -19,11 +19,27 @@
 
 </div>
 
-**励志熔铸数百插件为一。**
+**把 Agent 的能力，组织成一张真正能工作的桌面。**
 
-Deepseek Harness EAC 是基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的开源第三方桌面插件整合工作台
+Deepseek Harness EAC 是基于 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 的开源桌面工作台。它将对话、项目文件、工具执行与插件生态连接起来，配合原生窗口、独立运行环境和随包运行时，让你从安装直接进入工作。
 
 **EAC · Embracing All Creation · 揽尽万象。** 开放的是能力，清晰的是边界：桌面壳负责体验，服务层负责运行，Harness 内核负责 Agent，扩展包负责更多可能。
+
+<p align="center"><img src="docs/screenshot-preview.jpg" alt="EAC desktop skin preview" width="960" /><br /><sub>皮肤效果展示 · 界面外观随所安装的皮肤而变化。</sub></p>
+
+## 目录
+
+- [核心能力](#核心能力)
+- [快速开始](#快速开始)
+- [架构设计](#架构设计)
+- [插件与外观](#插件与外观)
+- [数据与环境](#数据与环境)
+- [开发指南](#开发指南)
+- [文档与社区](#文档与社区)
+- [社区与支持](#社区与支持)
+- [贡献者与致谢](#贡献者与致谢)
+- [许可与致谢](#许可与致谢)
+- [Star 趋势](#star-趋势)
 
 ## 核心能力
 
@@ -48,11 +64,25 @@ Windows 最新稳定版：**v6.0.0**。其余平台按包格式列出最近发�
 
 | 平台 | 版本 | 直接下载 | 更新时间（北京时间） |
 | --- | --- | --- | --- |
-| Windows x64 | v6.0.0 | [Full Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-Setup-x64.exe) | 2026-10-05 |
-| Windows x64 | v6.0.0 | [Lite Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-Setup-x64.exe) | 2026-10-05 |
-| Linux x64 | v5.3.6 | [AppImage](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage) | 2026-09-03 |
-| Linux x64 | v5.3.6 | [deb](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb) | 2026-09-03 |
-| macOS arm64 | v5.1.0 | [dmg](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg) | 2026-08-27 |
+| Windows x64 | v6.0.0 | [Full Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-Setup-x64.exe) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Full Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-full-v6.0.0-x64-portable.zip) | 2026-10-05 02:23 |
+| Windows x64 | v6.0.0 | [Lite Setup](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-Setup-x64.exe) | 2026-10-05 00:49 |
+| Windows x64 | v6.0.0 | [Lite Portable](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/Deepseek-Harness-EAC-lite-v6.0.0-x64-portable.zip) | 2026-10-05 00:49 |
+| Linux x64 | v5.3.6 | [AppImage](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.AppImage) | 2026-09-03 19:30 |
+| Linux x64 | v5.3.6 | [deb](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.3.6/Deepseek.Harness.EAC_5.3.6_amd64.deb) | 2026-09-03 19:30 |
+| Linux x64 | v4.4.0-linux | [rpm](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v4.4.0-linux/Deepseek-Harness-EAC-4.4.0.x86_64.rpm) | 2026-08-19 19:13 |
+| macOS arm64 | v5.1.0 | [dmg](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.dmg) | 2026-08-27 15:12 |
+| macOS arm64 | v5.1.0 | [app.zip](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v5.1.0/Deepseek.Harness.EAC_5.1.0_macos-arm64.app.zip) | 2026-08-27 15:12 |
+
+[发布说明](https://github.com/DSH-EAC/EAC-Desktop/releases/tag/v6.0.0) · [SHA256SUMS.txt](https://github.com/DSH-EAC/EAC-Desktop/releases/download/v6.0.0/SHA256SUMS.txt)
+
+更新时间取自 GitHub 文件更新记录。不同平台安装包可能属于不同代际，安装前请阅读对应版本说明。Windows 依赖 WebView2；云端模型调用需要网络与提供商凭据。
+
+1. **启动应用**，等待本地 dsh 服务就绪并进入 Web UI。
+2. **配置模型**，填写提供商与 API Key。
+3. **选择工作目录**，描述任务，让 Agent 在项目上下文中执行。
+4. **检查结果**，结合会话输出与文件变更视图审阅修改。
+5. **按需扩展**，从插件市场选择适合工作流的能力。
 
 <details>
 <summary>校验下载文件</summary>
@@ -69,7 +99,7 @@ Get-FileHash -LiteralPath '<下载文件路径>' -Algorithm SHA256
 
 **一个桌面入口，三层明确分工。** EAC 将操作系统集成、运行编排与 Agent 内核分离，让桌面体验与扩展能力各自演进。
 
-![EAC 架构：Tauri 通过 RPC 驱动 Node sidecar，DPX 为服务与官方 dsh 内核准备运行环境](docs/assets/eac-runtime-flow.svg)
+![EAC 架构：Tauri 通过 RPC 驱动 Node sidecar，DPX 为服务与官方 dsh 内核准备运行环境](docs/assets/eac-runtime-flow-zh.svg)
 
 | 层次 | 职责 | 代码入口 |
 | --- | --- | --- |
@@ -240,11 +270,9 @@ node scripts/plugin-sync.mjs validate
 
 欢迎交流使用技巧、插件开发与问题排查。
 
-| 渠道 | 入口 |
-| --- | --- |
-| QQ | [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) |
-| Discord | [DSH-EAC](https://discord.com/invite/kY48Ah8h) |
-| 问题反馈 | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
+| QQ | Discord | 问题反馈 |
+| :---: | :---: | :---: |
+| [1083832019](https://qm.qq.com/q/vqXxQQ3rmo) | [DSH-EAC](https://discord.com/invite/kY48Ah8h) | [GitHub Issues](https://github.com/DSH-EAC/EAC-Desktop/issues) |
 
 <table><tr><td align="center"><img src="docs/qq-group-qrcode.jpg" alt="QQ group QR code" width="260" /></td><td align="center"><img src="docs/wechat-group-qrcode.jpg" alt="WeChat group QR code" width="260" /></td></tr><tr><td align="center">QQ · 1083832019</td><td align="center">微信交流群</td></tr></table>
 
@@ -252,32 +280,32 @@ node scripts/plugin-sync.mjs validate
 
 感谢为 EAC 的代码、平台支持、插件生态与文档投入时间的开发者。
 
-<table>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=80" width="64" height="64" alt="Ebony-Vinyl" /><br />Ebony-Vinyl</a></td>
-<td align="center" width="25%"><a href="https://github.com/metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=80" width="64" height="64" alt="metaone01" /><br />metaone01</a></td>
-<td align="center" width="25%"><a href="https://github.com/jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=80" width="64" height="64" alt="jing-hy" /><br />jing-hy</a></td>
-<td align="center" width="25%"><a href="https://github.com/zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=80" width="64" height="64" alt="zixin947" /><br />zixin947</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=80" width="64" height="64" alt="says693" /><br />says693</a></td>
-<td align="center" width="25%"><a href="https://github.com/dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=80" width="64" height="64" alt="dtyg123" /><br />dtyg123</a></td>
-<td align="center" width="25%"><a href="https://github.com/lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=80" width="64" height="64" alt="lanyun077" /><br />lanyun077</a></td>
-<td align="center" width="25%"><a href="https://github.com/BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=80" width="64" height="64" alt="BAIKAI23333" /><br />BAIKAI23333</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=80" width="64" height="64" alt="nishantpurohit04" /><br />nishantpurohit04</a></td>
-<td align="center" width="25%"><a href="https://github.com/ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=80" width="64" height="64" alt="ViscaOwO" /><br />ViscaOwO</a></td>
-<td align="center" width="25%"><a href="https://github.com/jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=80" width="64" height="64" alt="jiang8297" /><br />jiang8297</a></td>
-<td align="center" width="25%"><a href="https://github.com/Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=80" width="64" height="64" alt="Luoye-hb" /><br />Luoye-hb</a></td>
-</tr>
-<tr>
-<td align="center" width="25%"><a href="https://github.com/look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=80" width="64" height="64" alt="look-back-lysj" /><br />look-back-lysj</a></td>
-<td align="center" width="25%"><a href="https://github.com/T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=80" width="64" height="64" alt="T-Auto" /><br />T-Auto</a></td>
-<td align="center" width="25%"><a href="https://github.com/maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=80" width="64" height="64" alt="maliang233" /><br />maliang233</a></td>
-<td align="center" width="25%"><a href="https://github.com/lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=80" width="64" height="64" alt="lbn2011" /><br />lbn2011</a></td>
-</tr>
-</table>
+<div align="center">
+
+<p>
+<a href="https://github.com/Ebony-Vinyl" title="Ebony-Vinyl"><img src="https://avatars.githubusercontent.com/u/245557608?v=4&amp;s=128" width="64" height="64" alt="Ebony-Vinyl" /></a>
+<a href="https://github.com/metaone01" title="metaone01"><img src="https://avatars.githubusercontent.com/u/99704629?v=4&amp;s=128" width="64" height="64" alt="metaone01" /></a>
+<a href="https://github.com/jing-hy" title="jing-hy"><img src="https://avatars.githubusercontent.com/u/281396152?v=4&amp;s=128" width="64" height="64" alt="jing-hy" /></a>
+<a href="https://github.com/zixin947" title="zixin947"><img src="https://avatars.githubusercontent.com/u/318131693?v=4&amp;s=128" width="64" height="64" alt="zixin947" /></a>
+<a href="https://github.com/says693" title="says693"><img src="https://avatars.githubusercontent.com/u/317628891?v=4&amp;s=128" width="64" height="64" alt="says693" /></a>
+<a href="https://github.com/dtyg123" title="dtyg123"><img src="https://avatars.githubusercontent.com/u/171705219?v=4&amp;s=128" width="64" height="64" alt="dtyg123" /></a>
+<a href="https://github.com/lanyun077" title="lanyun077"><img src="https://avatars.githubusercontent.com/u/186024291?v=4&amp;s=128" width="64" height="64" alt="lanyun077" /></a>
+<a href="https://github.com/BAIKAI23333" title="BAIKAI23333"><img src="https://avatars.githubusercontent.com/u/196413461?v=4&amp;s=128" width="64" height="64" alt="BAIKAI23333" /></a>
+</p>
+<p>
+<a href="https://github.com/nishantpurohit04" title="nishantpurohit04"><img src="https://avatars.githubusercontent.com/u/116972523?v=4&amp;s=128" width="64" height="64" alt="nishantpurohit04" /></a>
+<a href="https://github.com/ViscaOwO" title="ViscaOwO"><img src="https://avatars.githubusercontent.com/u/221565198?v=4&amp;s=128" width="64" height="64" alt="ViscaOwO" /></a>
+<a href="https://github.com/jiang8297" title="jiang8297"><img src="https://avatars.githubusercontent.com/u/242639667?v=4&amp;s=128" width="64" height="64" alt="jiang8297" /></a>
+<a href="https://github.com/Luoye-hb" title="Luoye-hb"><img src="https://avatars.githubusercontent.com/u/238787898?v=4&amp;s=128" width="64" height="64" alt="Luoye-hb" /></a>
+<a href="https://github.com/look-back-lysj" title="look-back-lysj"><img src="https://avatars.githubusercontent.com/u/318155171?v=4&amp;s=128" width="64" height="64" alt="look-back-lysj" /></a>
+<a href="https://github.com/T-Auto" title="T-Auto"><img src="https://avatars.githubusercontent.com/u/183904010?v=4&amp;s=128" width="64" height="64" alt="T-Auto" /></a>
+<a href="https://github.com/maliang233" title="maliang233"><img src="https://avatars.githubusercontent.com/u/78346713?v=4&amp;s=128" width="64" height="64" alt="maliang233" /></a>
+<a href="https://github.com/lbn2011" title="lbn2011"><img src="https://avatars.githubusercontent.com/u/89037561?v=4&amp;s=128" width="64" height="64" alt="lbn2011" /></a>
+</p>
+
+[Ebony-Vinyl](https://github.com/Ebony-Vinyl) · [metaone01](https://github.com/metaone01) · [jing-hy](https://github.com/jing-hy) · [zixin947](https://github.com/zixin947) · [says693](https://github.com/says693) · [dtyg123](https://github.com/dtyg123) · [lanyun077](https://github.com/lanyun077) · [BAIKAI23333](https://github.com/BAIKAI23333) · [nishantpurohit04](https://github.com/nishantpurohit04) · [ViscaOwO](https://github.com/ViscaOwO) · [jiang8297](https://github.com/jiang8297) · [Luoye-hb](https://github.com/Luoye-hb) · [look-back-lysj](https://github.com/look-back-lysj) · [T-Auto](https://github.com/T-Auto) · [maliang233](https://github.com/maliang233) · [lbn2011](https://github.com/lbn2011)
+
+</div>
 
 特别感谢 [@Nuomi9](https://github.com/Nuomi9) 对 macOS 桌面移植的贡献（[PR #234](https://github.com/DSH-EAC/EAC-Desktop/pull/234)）。插件作者与皮肤来源详见 [生态致谢名单](docs/ECOSYSTEM-CREDITS.md)。
 
@@ -290,3 +318,13 @@ EAC 使用 [MIT License](LICENSE)。感谢 [DeepSeek Harness](https://github.com
 ---
 
 <div align="center"><sub>Embracing All Creation · 精简本体，容纳更多可能。</sub></div>
+
+## Star 趋势
+
+<a href="https://www.star-history.com/#DSH-EAC/EAC-Desktop&amp;Date">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date&amp;theme=dark" />
+<source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" />
+<img alt="Star History" src="https://api.star-history.com/svg?repos=DSH-EAC/EAC-Desktop&amp;type=Date" width="960" />
+</picture>
+</a>
