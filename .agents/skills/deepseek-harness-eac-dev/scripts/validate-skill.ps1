@@ -480,9 +480,7 @@ if ($repoRoot -and (Test-Path -LiteralPath $testRunnerPath -PathType Leaf)) {
 }
 
 $smokeScripts = @(
-    'boot-smoke.js',
-    'gui-smoke.js',
-    'update-smoke.js',
+    'dsh-desktop\test\smoke-sidecar-dpx-isolation.mjs',
     'tauri-shell\stage-resources.mjs',
     'tauri-shell\make-portable.mjs'
 )
@@ -503,15 +501,30 @@ $officialValidator = Join-Path $userCodexHome 'skills\.system\skill-creator\scri
 $python = Get-Command python -ErrorAction SilentlyContinue
 $officialValidatorResult = 'not-run'
 if ($python -and (Test-Path -LiteralPath $officialValidator -PathType Leaf)) {
-    $global:LASTEXITCODE = 0
-    $validatorOutput = @(
-        & $python.Source -X utf8 $officialValidator $skillRoot 2>&1
-    )
-    if ($LASTEXITCODE -eq 0) {
-        $officialValidatorResult = 'passed'
+    # quick_validate.py is optional tooling; an interpreter without its PyYAML
+    # dependency is unavailable, not a failed validation of the repository Skill.
+    $yamlProbe = @(& $python.Source -c "import importlib.util; print('ready' if importlib.util.find_spec('yaml') else 'unavailable')")
+    if ($LASTEXITCODE -ne 0 -or 'ready' -notin $yamlProbe) {
+        $officialValidatorResult = 'unavailable'
+        Add-Warning 'Official Skill validator was not run because the selected Python lacks PyYAML.'
     } else {
-        $officialValidatorResult = 'failed'
-        Add-Error "Official Skill validator failed: $($validatorOutput -join "`n")"
+        $global:LASTEXITCODE = 0
+        # PowerShell 5.1 turns redirected native stderr into ErrorRecord values.
+        # Capture those so genuine validator failures still produce structured JSON.
+        $savedErrorAction = $ErrorActionPreference
+        try {
+            $ErrorActionPreference = 'Continue'
+            $validatorOutput = @(& $python.Source -X utf8 $officialValidator $skillRoot 2>&1)
+            $validatorExitCode = $LASTEXITCODE
+        } finally {
+            $ErrorActionPreference = $savedErrorAction
+        }
+        if ($validatorExitCode -eq 0) {
+            $officialValidatorResult = 'passed'
+        } else {
+            $officialValidatorResult = 'failed'
+            Add-Error "Official Skill validator failed: $($validatorOutput -join "`n")"
+        }
     }
 } else {
     Add-Warning 'Official Skill validator was not run because Python or quick_validate.py is unavailable.'

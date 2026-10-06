@@ -164,7 +164,7 @@ Assert-Fixture -Name 'shell-skin-classification' -Condition (
     $shellSkin.data.status -eq 'ready' -and
     $shellSkin.data.minimumValidation -eq 'targeted' -and
     'shell-skins' -in @($shellSkin.data.matchedRules) -and
-    'test/shell-skin-pack.test.ts' -in @($shellSkin.data.suggestedTests) -and
+    'test/stage-7-canonical-source.test.ts' -in @($shellSkin.data.suggestedTests) -and
     @($shellSkin.data.unmatchedCodeFiles).Count -eq 0
 ) -Failure ($shellSkin.raw)
 
@@ -203,12 +203,12 @@ Assert-Fixture -Name 'documentation-rule' -Condition (
 
 $typescriptTest = Invoke-JsonFixture -Script 'classify-change.ps1' -Arguments @(
     '-RepoPath', $repoRoot,
-    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["dsh-desktop/test/preset-sync.test.ts"]')
+    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["dsh-desktop/test/credentials-heal.test.ts"]')
 )
 Assert-Fixture -Name 'typescript-test-path' -Condition (
     $typescriptTest.exitCode -eq 0 -and
     $typescriptTest.data.status -eq 'ready' -and
-    'test/preset-sync.test.ts' -in @($typescriptTest.data.suggestedTests) -and
+    'test/credentials-heal.test.ts' -in @($typescriptTest.data.suggestedTests) -and
     @($typescriptTest.data.missingSuggestedTests).Count -eq 0
 ) -Failure ($typescriptTest.raw)
 
@@ -226,7 +226,7 @@ Assert-Fixture -Name 'skill-rule-exclusive' -Condition (
 
 $ciWorkflow = Invoke-JsonFixture -Script 'classify-change.ps1' -Arguments @(
     '-RepoPath', $repoRoot,
-    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '[".github/workflows/ci.yml"]')
+    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '[".github/workflows/staged-runtime-artifact.yml"]')
 )
 Assert-Fixture -Name 'ci-workflow-not-release' -Condition (
     $ciWorkflow.exitCode -eq 0 -and
@@ -250,7 +250,7 @@ Assert-Fixture -Name 'verify-files-json' -Condition (
 $levelFloor = Invoke-JsonFixture -Script 'verify-change.ps1' -Arguments @(
     '-RepoPath', $repoRoot,
     '-Level', 'targeted',
-    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["dsh-desktop/lib/desktop/balance.ts"]')
+    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["dsh-desktop/lib/desktop/companion-sync.ts"]')
 )
 Assert-Fixture -Name 'validation-level-floor' -Condition (
     $levelFloor.exitCode -eq 0 -and
@@ -268,6 +268,61 @@ Assert-Fixture -Name 'manual-check-plan' -Condition (
     $partialPlan.data.status -eq 'planned-partial' -and
     @($partialPlan.data.unverifiedChecks).Count -gt 0
 ) -Failure ($partialPlan.raw)
+
+# All rules must remain runnable against the current checkout, including rules
+# not selected by this task. Never silently filter missing tests out of the gate.
+$ruleData = Import-PowerShellDataFile -LiteralPath (Join-Path $skillRoot 'references\change-rules.psd1')
+$missingRuleTests = @($ruleData.Rules | ForEach-Object { @($_.Tests) } | Sort-Object -Unique | Where-Object {
+    -not (Test-Path -LiteralPath (Join-Path $repoRoot "dsh-desktop\$_") -PathType Leaf)
+})
+Assert-Fixture -Name 'all-rule-test-paths-exist' -Condition ($missingRuleTests.Count -eq 0) -Failure ($missingRuleTests -join ', ')
+
+$currentSweep = Invoke-JsonFixture -Script 'classify-change.ps1' -Arguments @(
+    '-RepoPath', $repoRoot,
+    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["tauri-shell/src/main.rs","tauri-shell/sidecar/bridge.ts","dsh-desktop/lib/desktop/companion-sync.ts","dsh-desktop/lib/desktop/plugin-ops.ts","dsh-desktop/lib/bundle-identity.ts","tauri-shell/stage-resources.mjs"]')
+)
+Assert-Fixture -Name 'current-runtime-change-classification' -Condition (
+    $currentSweep.exitCode -eq 0 -and
+    $currentSweep.data.status -eq 'ready' -and
+    $currentSweep.data.minimumValidation -eq 'package' -and
+    @($currentSweep.data.missingSuggestedTests).Count -eq 0 -and
+    @($currentSweep.data.unmatchedCodeFiles).Count -eq 0
+) -Failure ($currentSweep.raw)
+
+$runtimePlan = Invoke-JsonFixture -Script 'verify-change.ps1' -Arguments @(
+    '-RepoPath', $repoRoot,
+    '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["tauri-shell/src/main.rs"]')
+)
+Assert-Fixture -Name 'retired-runtime-harnesses-stay-unverified' -Condition (
+    (($runtimePlan.exitCode -eq 0 -and $runtimePlan.data.status -eq 'planned-partial') -or
+        ($runtimePlan.exitCode -eq 2 -and $runtimePlan.data.status -eq 'blocked' -and
+         $runtimePlan.data.classification.status -eq 'ready' -and
+         $runtimePlan.data.preflight.status -eq 'blocked' -and
+         @($runtimePlan.data.errors).Count -eq 1 -and
+         $runtimePlan.data.errors[0] -like 'Preflight blocked validation:*')) -and
+    'boot-smoke' -in @($runtimePlan.data.unverifiedChecks | ForEach-Object { $_.id }) -and
+    'gui-smoke' -in @($runtimePlan.data.unverifiedChecks | ForEach-Object { $_.id }) -and
+    @($runtimePlan.data.automatedChecks | Where-Object { $_.command -match '(?:boot|gui|update)-smoke\.js|upgrade-test-441\.js' }).Count -eq 0
+) -Failure ($runtimePlan.raw)
+
+$missingFixture = Join-Path $env:TEMP ('eac-skill-missing-test-' + [Guid]::NewGuid().ToString('N'))
+New-Item -ItemType Directory -Path (Join-Path $missingFixture 'dsh-desktop') -Force | Out-Null
+try {
+    $missingTest = Invoke-JsonFixture -Script 'classify-change.ps1' -Arguments @(
+        '-RepoPath', $missingFixture,
+        '-FilesJsonBase64', (ConvertTo-FilesJsonBase64 '["dsh-desktop/lib/desktop/companion-sync.ts"]')
+    )
+    Assert-Fixture -Name 'missing-selected-test-blocks' -Condition (
+        $missingTest.exitCode -eq 2 -and $missingTest.data.status -eq 'blocked' -and
+        @($missingTest.data.missingSuggestedTests).Count -gt 0
+    ) -Failure ($missingTest.raw)
+} finally {
+    $resolved = (Resolve-Path -LiteralPath $missingFixture).Path
+    $tempRoot = [IO.Path]::GetFullPath($env:TEMP).TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar
+    if ($resolved.StartsWith($tempRoot, [StringComparison]::OrdinalIgnoreCase)) {
+        Remove-Item -LiteralPath $resolved -Recurse -Force
+    }
+}
 
 $nonGit = Join-Path $env:TEMP ('eac-skill-non-git-' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $nonGit -Force | Out-Null

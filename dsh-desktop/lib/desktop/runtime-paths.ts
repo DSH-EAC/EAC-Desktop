@@ -82,6 +82,15 @@ export function npmCli(): string {
   return tauriBundled;
 }
 
+export function pnpmCli(): string {
+  return path.resolve(appRoot(), 'vendor', 'pnpm', 'bin', 'pnpm.cjs');
+}
+
+/** The EAC carrier is separate from dshBin(), which identifies the kernel root. */
+export function dshCli(): string {
+  return path.resolve(appRoot(), 'scripts', 'eac-cli.js');
+}
+
 // Context shared with the updater module.
 export function updCtx(): UpdCtx {
   return {

@@ -98,6 +98,7 @@ interface Fixture {
 function writePackage(dir: string, name: string, extra: Record<string, unknown> = {}): void {
   mkdirSync(dir, { recursive: true });
   writeFileSync(join(dir, 'package.json'), JSON.stringify({ name, version: '1.0.0', ...extra }, null, 2) + '\n');
+  writeFileSync(join(dir, '.eac-copy-stamp.json'), JSON.stringify({ v: '1.0.0', f: 1, b: 1 }));
 }
 
 /** 造一个含旧皮肤残留 + M2 公约皮肤平台的 profile（含 node_modules 副本与 package.json 依赖）。 */

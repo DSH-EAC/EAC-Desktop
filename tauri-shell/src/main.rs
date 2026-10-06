@@ -76,35 +76,11 @@ fn ws_port() -> u16 {
     WS_PORT_EFFECTIVE.load(Ordering::SeqCst)
 }
 
-/// 内核契约桥：把壳层的自绘标题栏高度翻译成内核认识的形态，并补上被皮肤
-/// 漏掉的「内容区高度扣减」。
-///
-/// 两条契约在 v6 外壳迁移时对不上：
-///   - 壳层（sidecar/bridge.ts）只发布 `data-dsh-title-bar-height="36"`，
-///     注释写「内核据此把顶部固定元素下移」，但内核**从不读这个属性**
-///     （全量检索 apps/ packages/ 均无引用）—— 是个死属性。
-///   - 内核实际读的是 `data-windows-titlebar`（布尔）+
-///     `--dsh-windows-titlebar-height`（长度），而内核设置后者的唯一实现
-///     位于 Electron preload（`import { ipcRenderer } from 'electron'`）；
-///     v6 换 Tauri 后 Electron 整条链不再随包分发，二者都无人提供。
-///
-/// 真正导致「设置按钮看不见」的是皮肤 CSS 的半截补偿（实测 CDP 取证）：
-///   system.default 的 `html[data-dsh-title-bar-height] body` 只写了
-///   `padding-top:36px`，没有同步扣减子树高度。于是 `#root`/`.frame`
-///   仍是 body 的 100%（843px），被 padding 推下 36px 后底边 = 879，
-///   超出 body 的 843px；`body{overflow:hidden}` 把这 36px 裁掉，落在
-///   y=803..873 的侧边栏 footArea（`sidebar.settings` = 设置按钮）底部
-///   30px 因此不可见，用户找不到设置入口。
-///
-/// 皮肤 CSS 属**钉版二进制产物**（system.default-2.0.0.dshpack.tar，
-/// stage-resources.mjs 与 main.rs 双重校验 SHA-256/digest），不可能就地改。
-/// 故由壳层注入自己的补偿规则，且只加在 `[data-dsh-title-bar-height]` 作用域
-/// 下 —— 该属性只有本壳会设，其它部署形态不受影响。
-///
-/// 选择器锚定内核稳定契约 `data-control-name="session-root"`（壳层自己的
-/// CSS 也用它），而非 CSS-modules 哈希类名：内核前端换哈希即静默失效。
-/// 直接命中 frame 而非 `#root`：`#root` 是普通块盒、子级为 display:contents，
-/// 其 height 不向 frame 传递（CDP 实测：改 `#root` 高度 frame 仍 843px）。
+/// Windows 内核布局为自绘标题栏预留一次空间。内核 frame 的 padding、
+/// resize handle 和 overlay 共同读取 `--dsh-windows-titlebar-height`。
+/// 钉版皮肤另给 body 加了 36px padding，不能与这套布局同时生效：否则
+/// 内容和 resize handle 都从 y=72 开始，而壳栏实际只占 y=0..36。
+/// 壳层覆盖自己的 body 补偿，让内核统一管理内容区；不修改钉版皮肤。
 const TITLE_BAR_HEIGHT_PX: u32 = 36;
 
 /// 壳层自有样式表 id：补偿规则与标记同源，便于排查与幂等。
@@ -126,7 +102,7 @@ r.setAttribute('data-dsh-title-bar-height','{height}');\
 r.style.setProperty('--dsh-title-bar-height',h);\
 if(!document.getElementById('{style_id}')){{var s=document.createElement('style');\
 s.id='{style_id}';\
-s.textContent='html[data-dsh-title-bar-height] [data-control-name=\"session-root\"]>[class*=frame]{{height:calc(100% - {height}px) !important;max-height:calc(100% - {height}px) !important}}';\
+s.textContent='html[data-dsh-title-bar-height][data-windows-titlebar] body{{padding-top:0 !important}}html[data-dsh-title-bar-height][data-windows-titlebar] [data-control-name=\"session-root\"]>[class*=frame]{{height:100% !important;max-height:100% !important}}';\
 (document.head||r).appendChild(s)}}\
 return true}};\
 if(!d()){{if(document.readyState==='loading'){{document.addEventListener('DOMContentLoaded',d,{{once:true}})}}else{{document.addEventListener('readystatechange',function h(){{if(d()){{document.removeEventListener('readystatechange',h)}}}})}}}}}}",

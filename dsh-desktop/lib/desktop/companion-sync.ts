@@ -19,6 +19,8 @@ import path = require('node:path');
 import fs = require('node:fs');
 import os = require('node:os');
 import crypto = require('node:crypto');
+import { isMap, isSeq, parseDocument } from 'yaml';
+import type { Document } from 'yaml';
 import { updCtx, APP_ROOT } from './runtime-paths';
 import { isLiteDisabled, readInstallProfile } from './install-profile';
 import { desktopProfile, desktopProfileDir, ensureDesktopProfileInit, BUNDLED_BUILTIN_PLUGINS } from './profile';
@@ -26,6 +28,7 @@ import { ensureGuard } from './guard-box';
 import { applySessionManageFix } from './runtime-patches';
 import { pluginCapabilityDetails } from './platform';
 import { writeFileAtomic } from '../atomic-json.js';
+import { parsePatchData, registeredPatchEntryIds, resolveBundleIdentities, toggleBundleInPatch } from '../bundle-identity';
 import { PLUGIN_UPDATE_SOURCES as GENERATED_PLUGIN_UPDATE_SOURCES } from './plugin-sync-registry';
 // 未类型化依赖（Wave 3 收编），先以窄签名消费。
 const updater = require('../../updater') as {
@@ -45,6 +48,7 @@ const { healProfileModuleShadowing } = require('../../profile-module-heal') as {
 const { externalDefaultDisabledPlan, canonicalBundleId } = require('../../plugin-manager-state') as {
   externalDefaultDisabledPlan(o: {
     bundles?: unknown[];
+    bundleIdentities?: ReturnType<typeof resolveBundleIdentities>;
     isRegistered?: (id: string) => boolean;
     distributionClasses?: Record<string, string>;
     builtinIds?: Iterable<string>;
@@ -85,10 +89,8 @@ const { migrateManagedRouterPersonaPresets } = require('../../router-persona-pre
     log: (m: string) => void,
   ): { status: string; file: string }[];
 };
-const { hasEntryId, removePluginFromPatch, togglePluginInPatch } = require('../../scripts/plugin-manager-patch') as {
+const { hasEntryId } = require('../../scripts/plugin-manager-patch') as {
   hasEntryId(patch: string, id: string): boolean;
-  removePluginFromPatch(text: string, id: string): string;
-  togglePluginInPatch(text: string, id: string, enabled: boolean, name?: string): string;
 };
 
 /** 注入接口：由宿主（Electron main / Tauri sidecar）在启动时提供。 */
@@ -352,7 +354,7 @@ export function marketDuplicateEvidence(o: {
 // —— assets/skins 自 v6 起已不存在，皮肤平台自 EAC-CORE-SHELL-01 起是市场
 // 可选包（按需安装即写 profile bundles），不再有资产目录播种。
 
-import { copyPluginPackage, readJsonFile } from '../plugin-copy.js';
+import { COPY_STAMP, copyPluginPackage, readJsonFile } from '../plugin-copy.js';
 
 export {
   COPY_STAMP,
@@ -518,58 +520,144 @@ export const RETIRED_BUILTIN_PLUGINS = [
   { id: 'think-zh-expand-eac', name: 'dsh-think-zh-expand-eac' },
 ];
 
-// 清理退役内置插件在 profile 的所有残留（patch 行 / 包副本 / 依赖项）。
-// 内部函数：外部一律走带版本对齐门控的 retireRemovedBuiltinPluginsGated
-// （issue #74 —— 5.3.2 及以前 sidecar preBootSync 直调无门控版，门控被架空）。
-function retireRemovedBuiltinPlugins(profileDirP: string): void {
+// A package name alone is not provenance: users may reinstall retired plugins
+// from the community. Only an intact EAC copy stamp authorizes this migration.
+function managedRetiredCopy(profileDirP: string, name: string, dependency: unknown): string | null {
+  if (typeof dependency === 'string' && /^(?:file|link|workspace):/i.test(dependency)) return null;
+  const modules = path.join(profileDirP, 'node_modules');
+  const directory = path.join(modules, ...name.split('/'));
+  let stat: fs.Stats;
+  try { stat = fs.lstatSync(directory); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw error;
+  }
+  if (!stat.isDirectory() || stat.isSymbolicLink()) return null;
+  const expected = path.join(fs.realpathSync(modules), ...name.split('/'));
+  if (fs.realpathSync(directory).toLowerCase() !== expected.toLowerCase()) return null;
+  let rawStamp: string;
+  try { rawStamp = fs.readFileSync(path.join(directory, COPY_STAMP), 'utf8'); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+    throw error;
+  }
+  let stamp: Record<string, unknown>;
+  try { stamp = JSON.parse(rawStamp); } catch { return null; }
+  if (!stamp || typeof stamp.v !== 'string' || !Number.isSafeInteger(stamp.f)
+    || (stamp.f as number) < 1 || !Number.isSafeInteger(stamp.b) || (stamp.b as number) < 0) return null;
+  // A partially removed managed package may already have lost package.json.
+  // Retaining the stamp until last makes that interrupted cleanup retryable.
+  let manifest: Record<string, unknown> | null = null;
+  try { manifest = JSON.parse(fs.readFileSync(path.join(directory, 'package.json'), 'utf8')); }
+  catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      if (error instanceof SyntaxError) return null;
+      throw error;
+    }
+  }
+  if (manifest && (manifest.name !== name || String(manifest.version ?? '') !== stamp.v)) return null;
+  return rawStamp;
+}
+
+function retiredPatchRows(value: unknown, id: string): Array<{ name?: unknown }> {
+  if (value == null) return [];
+  if (!Array.isArray(value)) throw new Error('用户补丁必须是列表');
+  return value.flatMap((row) => {
+    if (!row || typeof row !== 'object') return [];
+    return [row, ...(Array.isArray(row.insert) ? row.insert : [])]
+      .filter((entry) => entry && typeof entry === 'object' && entry.id === id);
+  });
+}
+
+/** Only loader operations and their insert lists own IDs; nested config is user data. */
+function removeRetiredPatchRows(text: string, id: string): string {
+  const doc: Document = parseDocument(text, {
+    customTags: [{ tag: 'tag:yaml.org,2002:js', resolve: (value: string) => value }],
+  });
+  if (!doc.contents && !doc.errors.length) return text;
+  if (doc.errors.length || !isSeq(doc.contents)) throw new Error('用户补丁 YAML 无法解析');
+  let changed = false;
+  doc.contents.items = doc.contents.items.filter((item) => {
+    if (!isMap(item)) return true;
+    const omit = (): false => {
+      if (item.commentBefore) doc.commentBefore = [doc.commentBefore, item.commentBefore].filter(Boolean).join('\n');
+      changed = true;
+      return false;
+    };
+    if (item.get('id') === id) return omit();
+    const insert = item.get('insert');
+    if (isSeq(insert)) {
+      insert.items = insert.items.filter((entry) => {
+        if (isMap(entry) && entry.get('id') === id) { changed = true; return false; }
+        return true;
+      });
+      if (insert.items.length === 0 && item.items.length === 1) return omit();
+    }
+    return true;
+  });
+  return changed ? doc.toString() : text;
+}
+
+function removeManagedRetiredCopy(directory: string, rawStamp: string): void {
+  // Do not let recursive removal erase our ownership proof before a locked file
+  // fails. Every child path comes from this verified package directory.
+  for (const entry of fs.readdirSync(directory)) {
+    if (entry !== COPY_STAMP) fs.rmSync(path.join(directory, entry), { recursive: true, force: true });
+  }
+  fs.unlinkSync(path.join(directory, COPY_STAMP));
+  try { fs.rmdirSync(directory); }
+  catch (error) {
+    try { fs.writeFileSync(path.join(directory, COPY_STAMP), rawStamp); } catch { /* retain original failure */ }
+    throw error;
+  }
+}
+
+function retireRemovedBuiltinPlugins(profileDirP: string): boolean {
   const patchFile = path.join(profileDirP, 'cordis.patch.yml');
-  for (const p of RETIRED_BUILTIN_PLUGINS) {
+  const packageFile = path.join(profileDirP, 'package.json');
+  let complete = true;
+  for (const plugin of RETIRED_BUILTIN_PLUGINS) {
     try {
-      if (fs.existsSync(patchFile)) {
-        const text = fs.readFileSync(patchFile, 'utf8');
-        const patched = removePluginFromPatch(text, p.id);
-        if (patched !== text) {
-          writeFileAtomic(patchFile, patched);
-          ctx.log('boot', `已清理退役内置插件 ${p.id} 的 profile 行`);
+      let pkg: Record<string, any> = {};
+      try { pkg = JSON.parse(fs.readFileSync(packageFile, 'utf8')); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+      const rawStamp = managedRetiredCopy(profileDirP, plugin.name, pkg.dependencies?.[plugin.name]);
+      if (rawStamp === null) continue;
+      let text: string | null = null;
+      try { text = fs.readFileSync(patchFile, 'utf8'); }
+      catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+      if (text !== null) {
+        const rows = retiredPatchRows(parsePatchData(text), plugin.id);
+        // A same-id entry naming a different package belongs to the user.
+        if (rows.some((row) => typeof row.name === 'string' && row.name !== plugin.name)) continue;
+        const patched = removeRetiredPatchRows(text, plugin.id);
+        if (retiredPatchRows(parsePatchData(patched), plugin.id).length > 0) {
+          throw new Error(`无法安全移除退役插件行 ${plugin.id}`);
         }
+        if (patched !== text) writeFileAtomic(patchFile, patched);
       }
-    } catch (err) {
-      ctx.log('boot', `清理退役内置插件 ${p.id} 行失败: ${String(((err as Error).message) || err)}`);
-    }
-    const pkgDir = path.join(profileDirP, 'node_modules', ...p.name.split('/'));
-    try {
-      if (fs.existsSync(pkgDir)) {
-        fs.rmSync(pkgDir, { recursive: true, force: true });
-        ctx.log('boot', `已清理退役内置插件 ${p.id} 的 profile 包副本`);
-      }
-    } catch (err) {
-      ctx.log('boot', `清理退役内置插件 ${p.id} 包失败: ${String(((err as Error).message) || err)}`);
-    }
-    try {
-      const pkgFile = path.join(profileDirP, 'package.json');
-      const pkg = JSON.parse(fs.readFileSync(pkgFile, 'utf8'));
       let changed = false;
-      if (pkg.dependencies && pkg.dependencies[p.name]) {
-        delete pkg.dependencies[p.name];
+      if (pkg.dependencies && Object.hasOwn(pkg.dependencies, plugin.name)) {
+        delete pkg.dependencies[plugin.name];
         changed = true;
-        ctx.log('boot', `已清理退役内置插件 ${p.id} 的 package.json 依赖`);
       }
-      // bundles 成员同样必须清掉：bundle 成员指向已不在包体的包会让
-      // dsh-app-boot 的 bundle 准入失败（或与 L3 默认禁用规划互撞成
-      // duplicate loader entry id），拖垮插件树。外迁的皮肤平台与 ISO-005
-      // 收敛出的 35 项都可能正是由 bundles 成员装载的，故必须在此兜底。
       const bundles = pkg?.dsh?.profile?.bundles;
       if (Array.isArray(bundles)) {
-        const next = bundles.filter((entry: unknown) => entry !== p.name);
+        const next = bundles.filter((entry: unknown) => entry !== plugin.name);
         if (next.length !== bundles.length) {
           pkg.dsh.profile.bundles = next;
           changed = true;
-          ctx.log('boot', `已清理退役内置插件 ${p.id} 的 profile bundles 成员`);
         }
       }
-      if (changed) fs.writeFileSync(pkgFile, JSON.stringify(pkg, null, 2) + '\n');
-    } catch { /* package.json 缺失/损坏则跳过 */ }
+      if (changed) writeFileAtomic(packageFile, JSON.stringify(pkg, null, 2) + '\n');
+      removeManagedRetiredCopy(path.join(profileDirP, 'node_modules', ...plugin.name.split('/')), rawStamp);
+      ctx.log('boot', `已清理受管退役插件 ${plugin.id}`);
+    } catch (error) {
+      complete = false;
+      ctx.log('boot', `清理退役插件 ${plugin.id} 未完成，下次启动重试: ${String((error as Error).message || error)}`);
+    }
   }
+  return complete;
 }
 
 // 安全模式守卫：<home>/guard/safe-mode.json active 时，配套插件的 patch 行
@@ -593,7 +681,7 @@ function safeModeActive(): boolean {
 // 记录已对齐的应用版本，pluginTreeRetiredListHash 记录已对齐的清单内容：
 // 只比对版本会让同版本内新列入的退役条目永远清不到（5.1.0 实测踩坑）。
 function retiredListHash(): string {
-  return crypto.createHash('sha256').update(JSON.stringify(RETIRED_BUILTIN_PLUGINS)).digest('hex');
+  return crypto.createHash('sha256').update(JSON.stringify({ policy: 'managed-copy-v2', plugins: RETIRED_BUILTIN_PLUGINS })).digest('hex');
 }
 export function retireRemovedBuiltinPluginsGated(profileDirP: string): void {
   let version = '';
@@ -615,15 +703,15 @@ export function retireRemovedBuiltinPluginsGated(profileDirP: string): void {
       ctx.log('boot', `已在本版本（${version}）对齐过内置插件树，跳过退役清理（用户调整优先）`);
       return;
     }
-    retireRemovedBuiltinPlugins(profileDirP);
+    if (!retireRemovedBuiltinPlugins(profileDirP)) return;
     const next = settings && typeof settings === 'object'
       ? { ...settings, pluginTreeAlignedVersion: version, pluginTreeRetiredListHash: hash }
       : { pluginTreeAlignedVersion: version, pluginTreeRetiredListHash: hash };
-    updater.saveSettings(c, next);
+    // saveSettings swallows write errors; the migration must observe durability.
+    writeFileAtomic(path.join(c.userDataDir, 'settings.json'), JSON.stringify(next, null, 2) + '\n');
     ctx.log('boot', `已在本版本（${version}）完成内置插件树对齐`);
   } catch (err) {
-    ctx.log('boot', '记录插件树对齐版本失败，按旧语义清理: ' + String(err));
-    retireRemovedBuiltinPlugins(profileDirP);
+    ctx.log('boot', '插件树对齐未完成，下次启动重试: ' + String(err));
   }
 }
 
@@ -973,18 +1061,23 @@ function ensurePluginHostDeps(profileDirP: string): void {
       p.id,
       canonicalBundleId(p.name),
     ]);
+    const registeredIds = registeredPatchEntryIds(patch);
     const externalDefaults = inSafeMode ? [] : externalDefaultDisabledPlan({
       bundles: bundled,
-      isRegistered: (id: string) => hasEntryId(patch, id),
+      bundleIdentities: resolveBundleIdentities(profileDirP, bundled.filter((name): name is string => typeof name === 'string')),
+      isRegistered: (id: string) => registeredIds.has(id),
       distributionClasses: PLUGIN_DISTRIBUTION_CLASSES,
       builtinIds: DISTRIBUTION_BUILTIN_PLUGIN_IDS,
       recommendedIds: RECOMMENDED_PACK_PLUGIN_IDS,
       skipIds: companionBundleIds,
     });
-    for (const ext of externalDefaults) {
-      patch = togglePluginInPatch(patch, ext.id, false, ext.name);
+    if (externalDefaults.length) {
+      patch = toggleBundleInPatch(patch, {
+        ok: true, entries: externalDefaults.map((entry) => ({ ...entry, disabled: false })),
+        entryIds: externalDefaults.map((entry) => entry.id),
+      }, false);
       changed = true;
-      ctx.log('boot', `外部插件默认关闭（可在「设置 → 插件 → 管理」启用）: ${ext.id}`);
+      for (const ext of externalDefaults) ctx.log('boot', `外部插件默认关闭（可在「设置 → 插件 → 管理」启用）: ${ext.id}`);
     }
     if (changed) {
       // 顺带清理历史遗留的孤儿 `- insert:` 行（v4.2/4.3 每次启动「剥离-回写」

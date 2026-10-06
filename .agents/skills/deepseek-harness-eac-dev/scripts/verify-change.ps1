@@ -352,33 +352,13 @@ if ($hasRequestedWork -and $effectiveLevel -in @('runtime', 'package')) {
         -WorkingDirectory $tauri `
         -Executable 'cargo' `
         -Arguments @('run', '--', '--bridge-test')
-    Add-AutomatedCheck `
-        -Id 'boot-smoke' `
-        -Label 'Boot smoke' `
-        -WorkingDirectory $root `
-        -Executable 'node' `
-        -Arguments @('boot-smoke.js')
-    Add-AutomatedCheck `
-        -Id 'gui-smoke' `
-        -Label 'GUI smoke' `
-        -WorkingDirectory $root `
-        -Executable 'node' `
-        -Arguments @('gui-smoke.js')
+    Add-ManualCheck -Id 'boot-smoke' -Description 'Exercise sidecar boot, restart and exit in a temporary profile; legacy boot-smoke.js is retired.'
+    Add-ManualCheck -Id 'gui-smoke' -Description 'Exercise settings, overlays and window lifecycle in the current desktop build; legacy gui-smoke.js is retired.'
 }
 
 if ($hasRequestedWork -and $effectiveLevel -eq 'package') {
-    Add-AutomatedCheck `
-        -Id 'update-smoke' `
-        -Label 'Update smoke' `
-        -WorkingDirectory $root `
-        -Executable 'node' `
-        -Arguments @('update-smoke.js')
-    Add-AutomatedCheck `
-        -Id 'upgrade-smoke' `
-        -Label 'Upgrade smoke' `
-        -WorkingDirectory $root `
-        -Executable 'node' `
-        -Arguments @('upgrade-test-441.js')
+    Add-ManualCheck -Id 'update-smoke' -Description 'Exercise release update success and rollback using real packages; legacy update-smoke.js is retired.'
+    Add-ManualCheck -Id 'upgrade-smoke' -Description 'Verify an existing profile upgrades without data loss; legacy upgrade-test-441.js is retired.'
     Add-AutomatedCheck `
         -Id 'stage-resources' `
         -Label 'Stage Tauri resources' `

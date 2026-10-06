@@ -165,7 +165,7 @@ const ROOT_FILES = [
 ];
 const LIB_DESKTOP = [
   'proc.js', 'platform.js', 'runtime-paths.js', 'environment.js', 'profile.js',
-  'runtime-patches.js', 'boot-server.js',
+  'runtime-patches.js', 'boot-server.js', 'package-manager.js', 'plugin-remove.js',
   // Task 3.3 插件治理三件套 + 其 lib/desktop 依赖
   'guard-box.js', 'companion-sync.js', 'plugin-ops.js',
   'install-profile.js', 'plugin-sync-registry.js',
@@ -177,6 +177,7 @@ const LIB_DESKTOP = [
   // 而不是把它当成错误弹给用户。
 ];
 const SCRIPTS = [
+  'eac-cli.js',
   'patch-session-manage.js', 'patch-deps.js',
   // plugin-ops 消费：核心插件集合判定 + patch 行读写
   'onboarding.js', 'plugin-manager-patch.js',
@@ -189,6 +190,7 @@ const SCRIPTS = [
 
 const LIB_VNEXT = [
   'atomic-json.js',
+  'bundle-identity.js',
   // companion-sync / guard-box 消费
   'plugin-copy.js',
 ];
@@ -500,6 +502,12 @@ if (existsSync(npmCache)) {
 } else {
   throw new Error('[stage] vendor/npm 缺失：先运行 npm run fetch-npm 重建 npm 运行时缓存');
 }
+
+// The Web plugin manager and market share the kernel's pnpm transactions.
+// Validate the exact version and JS entry before copying, never use global pnpm.
+const { bundledPackageManager } = await import('../dsh-desktop/lib/desktop/package-manager.js');
+bundledPackageManager(dd, path.join(dd, 'vendor', 'node', runtimeName));
+cpSync(path.join(dd, 'vendor', 'pnpm'), path.join(staged, 'dsh-desktop', 'vendor', 'pnpm'), { recursive: true });
 
 // 内核 tarball 缓存（0.1.2 起内核不在 npm registry 上：package.json 的
 // 依赖/overrides 全部指向 file:vendor/kernel/<version>/*.tgz）。装配面把这份

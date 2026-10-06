@@ -47,6 +47,7 @@ export interface BootServerCtx {
   desktopProfileDir(): string;
   nodeExe(): string;
   dshBin(): string;
+  dshCli(): string;
   loadSettings(): { webPort?: number } & Record<string, unknown>;
   saveSettings(s: Record<string, unknown>): void;
   isQuitting(): boolean;
@@ -137,9 +138,11 @@ async function startServer(unsafePortRetries = 4, overlays: string[] = []): Prom
   return new Promise<string>((resolve, reject) => {
     const nodeBin = ctx.nodeExe();
     const bin = ctx.dshBin();
+    const carrier = ctx.dshCli();
     if (!fs.existsSync(nodeBin)) {
       return reject(new Error('找不到内置 Node 运行时: ' + nodeBin));
     }
+    if (!fs.existsSync(carrier)) return reject(new Error('找不到桌面 CLI 启动器: ' + carrier));
     fs.mkdirSync(logsDir(), { recursive: true });
     // 启动截断：append-only 无轮转，长寿命安装会积累出数百 MB 的 dsh-web.log。
     // 超过 10MB 时保留尾部 2MB —— 诊断链路只读 tail（rescue-agent 与恢复
@@ -174,11 +177,11 @@ async function startServer(unsafePortRetries = 4, overlays: string[] = []): Prom
     // --no-open：内核 openBrowser 默认 true 会每轮启动弹一个系统浏览器标签。
     const proc = cp.spawn(
       nodeBin,
-      ['--use-system-ca', bin, '--profile', ctx.getDesktopProfile(), '--host', '127.0.0.1', '--port', String(webPort), '--no-open', ...patchArgs],
+      ['--use-system-ca', carrier, '--profile', ctx.getDesktopProfile(), '--host', '127.0.0.1', '--port', String(webPort), '--no-open', ...patchArgs],
       {
         ...childProcessSpawnOptions(),
         cwd: ctx.getUserDataDir(),
-        env: childEnv(),
+        env: { ...childEnv(), DSH_EAC_KERNEL_BIN: bin, DSH_BIN: carrier },
         windowsHide: true,
         stdio: ['ignore', 'pipe', 'pipe'],
       },

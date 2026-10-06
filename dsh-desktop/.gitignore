@@ -98,3 +98,8 @@ build/*
 /lib/plugin-copy.js
 /scripts/build-native.js
 /lib/atomic-json.js
+/lib/bundle-identity.js
+/lib/desktop/package-manager.js
+/lib/desktop/plugin-remove.js
+/scripts/eac-cli.js
+/scripts/fetch-pnpm.js

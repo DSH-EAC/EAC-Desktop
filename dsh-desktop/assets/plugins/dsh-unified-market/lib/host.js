@@ -41,9 +41,10 @@ import { scanCandidate, collectProfileState } from './plugin-conflict-scan.mjs'
 // 被丢掉。本层把配置写盘收敛到唯一入口：每次重读磁盘、以 id 为键并集合并、
 // CAS + 原子写 + 写后校验 + 失败回滚，外部行/注释一律保留。
 import {
-  readProfileConfig, commitProfileConfig, applyPatchToggle, mergeBundles, applyBundles,
+  readProfileConfig, commitProfileConfig,
   validatePatchText, listConfigSnapshots, restoreConfigSnapshot,
 } from './profile-sync.mjs'
+import { installedPackageName, togglePackage } from './bundle-toggle.mjs'
 
 export const name = 'dsh-unified-market'
 
@@ -167,7 +168,7 @@ function dshInvoke(explicit) {
     return invokeEntry(explicit.trim())
   }
   const entry = process.argv[1]
-  if (entry !== undefined && /[\\/](?:bin\.(?:js|ts)|dsh)$/.test(entry)) {
+  if (entry !== undefined && /[\\/](?:bin\.(?:js|ts)|eac-cli\.js|dsh)$/.test(entry)) {
     return invokeEntry(entry)
   }
   const cand = process.cwd().replace(/[\\/]+$/, '') + '/apps/cli/lib/bin.js'
@@ -340,7 +341,7 @@ function startOp(kind, profile, target, label, explicitBin, initialOutput) {
   })
   child.on('close', async (code) => {
     if (op.status !== 'running') return
-    const ok = code === 0
+    let ok = code === 0
     // M3/#416：本次安装是否落在「外部层默认禁用」语义内（热挂载与提示都用）。
     let installDefaultDisabled = false
     // V4：pnpm 已退出 —— 回填被重新解包清掉的第三方构建产物（先回填再
@@ -383,30 +384,21 @@ function startOp(kind, profile, target, label, explicitBin, initialOutput) {
         }
       }
     }
-    if (ok && (op.kind === 'install' || op.kind === 'uninstall')) {
-      // v0.4.0 双边同步：内核已在 CLI 内重写过 profile 配置，这里以「磁盘现状」
-      // 为基准做增量合并 —— 本次操作的意图（启用/禁用 + patch 行）落盘，同时
-      // 保留期间发生的一切外部改动。
-      const pkgName = op.pkg || op.target
-      const id = loaderEntryId(op.profile, pkgName)
-      // M3/#416 L3：外部插件（未随客户端内置分发的第三方包）安装后默认禁用，
-      // 用户在「设置 → 插件 → 管理」手动启用；内置/推荐包（壳每次启动同步进
-      // profile，清单见 .dsh-builtin-plugins.json）保持原有「安装即启用」。
-      const disabled = op.kind === 'uninstall' || isExternalInstall(op.profile, pkgName)
-      installDefaultDisabled = op.kind === 'install' && disabled
-      syncProfileConfig(
-        op,
-        (patchText) => {
-          const r = applyPatchToggle(
-            patchText, id, pkgName, disabled,
-            '# 插件市场（dsh-unified-market）：' + (disabled ? '关闭 ' : '启用 ') + id,
-          )
-          return r.changed ? r.text : null
-        },
-        (disabled ? '禁用并移除 ' : '启用 ') + pkgName + '（id: ' + id + '）',
-      )
-      if (installDefaultDisabled) {
-        appendOutput(op, '\n[M3/#416] 外部插件默认禁用：安装已完成，请在「设置 → 插件 → 管理」中手动启用后生效\n')
+    // Uninstall is already committed by the kernel transaction. Do not invent
+    // overrides from metadata that the package manager has just removed.
+    if (ok && op.kind === 'install') {
+      try {
+        const pkgName = installedPackageName(profileDir(op.profile), op)
+        installDefaultDisabled = isExternalInstall(op.profile, pkgName)
+        // Updates retain the user's explicit enabled/disabled choices.
+        if (installDefaultDisabled && !Object.hasOwn(op.beforeDeps, pkgName)) {
+          const result = togglePackage(profileDir(op.profile), pkgName, false)
+          if (!result.ok) throw new Error(result.error)
+          appendOutput(op, '\n[M3/#416] 外部插件默认禁用：安装已完成，请在「设置 → 插件 → 管理」中手动启用后生效\n')
+        }
+      } catch (error) {
+        ok = false
+        appendOutput(op, '\n[同步] ' + String(error?.message || error) + '\n')
       }
     }
     if (ok && op.kind === 'install' && hotCtx !== null && !installDefaultDisabled) {
@@ -437,65 +429,6 @@ function startOp(kind, profile, target, label, explicitBin, initialOutput) {
 
 /** Host ctx for hot-mounting, set by apply(); null in headless/test contexts. */
 let hotCtx = null
-
-/**
- * v0.4.0 双边同步：在 CLI（pnpm/dsh plugin）结束后，把「外部可能做过的改动」
- * 与「本次操作的意图」合并落盘，而不是让任一方覆盖另一方。
- *
- * 时序要点：内核 reconcilePlugins 已在 CLI 进程内重写过一次 package.json，
- * 因此这里必须**在 CLI 退出之后**再重读磁盘，绝不使用操作开始前的快照覆盖。
- *
- * @param {object} op - 操作对象（含 kind/target/profile）
- * @param {(patchText: string) => string|null} producePatch - 基于读到的 patch 产出新 patch（null=不改）
- * @param {string} summary - 写入说明（落进操作输出）
- */
-function syncProfileConfig(op, producePatch, summary) {
-  try {
-    const dir = profileDir(op.profile)
-    const res = commitProfileConfig(dir, (cfg) => {
-      // 1) bundles：以磁盘现状为基准做增量并集（保留既有相对顺序与其他改动）
-      let pkgText = cfg.pkgText
-      const name = op.pkg || op.target
-      const enable = op.kind === 'uninstall' ? [] : [name]
-      const disable = op.kind === 'uninstall' ? [name] : []
-      const merged = mergeBundles(cfg.bundles, enable, disable)
-      if (merged.changed) {
-        const built = applyBundles(cfg.pkgText, merged.bundles)
-        if (built.error) return { summary: 'bundles 未改动：' + built.error }
-        pkgText = built.text
-      }
-      // 2) patch：把目标 id 规范为顶层编辑型行（禁用）或复位（启用）
-      let patchText
-      if (typeof producePatch === 'function') {
-        const out = producePatch(cfg.patchText, cfg)
-        if (typeof out === 'string') patchText = out
-      }
-      return { pkgText, patch: patchText, summary }
-    })
-    if (res.ok && res.changed) {
-      appendOutput(op, '\n[同步] 双边同步写入 profile 配置：' + summary + (res.snapshot ? '（快照 ' + res.snapshot + '）' : '') + '\n')
-    } else if (!res.ok) {
-      appendOutput(op, '\n[同步] 配置同步未完成：' + String(res.error || '未知原因') + '（外部改动未被覆盖）\n')
-    }
-    return res
-  } catch (err) {
-    appendOutput(op, '\n[同步] 配置同步异常：' + String((err && err.message) || err) + '\n')
-    return { ok: false, error: String((err && err.message) || err) }
-  }
-}
-
-/**
- * 找出某个包对应的 loader 条目 id（用于禁用/复位 patch 行）。
- * 优先取包内 cordis.patch.yml 自己声明的 id —— 那是它挂载时使用的真实 id。
- */
-function loaderEntryId(profile, pkgName) {
-  try {
-    const patch = readFileSync(join(profileDir(profile), 'node_modules', pkgName, 'cordis.patch.yml'), 'utf8')
-    const m = /^\s*-\s*id:\s*([\w.-]+)\s*$/m.exec(patch)
-    if (m !== null) return m[1]
-  } catch { /* 包未落地或没有 patch */ }
-  return pkgName
-}
 
 /** Abort the live op (used by the panel's kill button). */
 function killOp() {
@@ -2084,27 +2017,13 @@ export function apply(ctx) {
           const pkgName = String(body.pkg || '').trim()
           if (!pkgName) return sendJson(res, 400, { ok: false, error: '缺少包名' })
           const enable = body.enabled !== false
-          const id = loaderEntryId(profile, pkgName)
-          const dir = profileDir(profile)
-          const result = commitProfileConfig(dir, (cfg) => {
-            const merged = mergeBundles(cfg.bundles, enable ? [pkgName] : [], enable ? [] : [pkgName])
-            const built = merged.changed ? applyBundles(cfg.pkgText, merged.bundles) : { text: cfg.pkgText, error: null }
-            if (built.error) return { summary: 'bundles 合并失败：' + built.error }
-            const tog = applyPatchToggle(
-              cfg.patchText, id, pkgName, !enable,
-              '# 插件市场（dsh-unified-market）：' + (enable ? '启用 ' : '关闭 ') + id,
-            )
-            return {
-              pkgText: built.text,
-              patch: tog.changed ? tog.text : cfg.patchText,
-              summary: (enable ? '启用 ' : '关闭 ') + pkgName + '（id: ' + id + '）',
-            }
-          })
+          const result = togglePackage(profileDir(profile), pkgName, enable)
           return sendJson(res, 200, {
             ok: result.ok,
             changed: result.changed,
             enabled: enable,
-            id,
+            id: result.id,
+            entryIds: result.entryIds,
             summary: result.summary,
             error: result.error,
             snapshot: result.snapshot,
