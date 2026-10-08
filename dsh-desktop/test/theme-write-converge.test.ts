@@ -180,3 +180,34 @@ test('convergence settles without extra writes when the target folds back', asyn
   assert.deepEqual(h.writes, [{ field: 'preference', value: 'dark' }]);
   assert.equal(h.runtime.preference, 'dark');
 });
+
+test('external write during in-flight: last writer wins, no revert after settle', async () => {
+  // 场景：本窗 dark 在途期间，他窗/外部提交了 system（快照更新模拟广播回源）。
+  // 语义裁定（审核第 2 点）：单字段并发写 = last-writer-wins，与上游一致；
+  // 本补丁不改变归属，只保证 (a) 在途期间显示不被陈旧快照拉回，
+  // (b) 本窗 settle 后 内存 == durable（无永久丢失、无数据损坏）。
+  const h = themeHarness();
+  h.runtime.preference = 'light';          // 起点 light，点 dark 是真实变更
+  h.state.snapshot.preference = 'light';
+  h.runtime.setTheme('dark');
+  h.state.snapshot.preference = 'system'; // 外部写入已提交 durable
+  h.runtime.adopt();                       // 在途防护：跳过，显示保持 dark
+  assert.equal(h.runtime.preference, 'dark');
+  await h.drain();                         // 本窗写 settle：dark 覆盖 system（后写者胜）
+  assert.equal(h.state.snapshot.preference, 'dark');
+  assert.equal(h.runtime.preference, 'dark');
+  assert.equal(h.runtime.__eacPending.size, 0);
+});
+
+test('conflict twice: rollback is user-visible (false consumed by rollback publish)', async () => {
+  // 场景（审核第 3 点）：持续冲突下重试仍失败——UI 消费路径 = 失败回滚 publish，
+  // 用户可见地回到持久值；不是静默丢操作。
+  const h = themeHarness();
+  h.state.settled = false; // host 持续拒绝
+  h.runtime.setTheme('light');
+  await h.drain();
+  assert.equal(h.runtime.preference, 'dark'); // 回滚到 durable
+  const last = h.published[h.published.length - 1];
+  assert.equal(last.preference, 'dark');      // 回滚已 publish（用户可见）
+  assert.equal(h.runtime.__eacPending.size, 0);
+});

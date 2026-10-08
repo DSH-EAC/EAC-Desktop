@@ -1077,18 +1077,36 @@ function patchClientModulesResolve(targetFile = CLIENT_MODULES_RESOLVE_TARGET): 
 }
 
 function main(): void {
-  patchPickerWorker();
-  patchSettingsNavScroll();
-  patchSettingsPanelResize();
-  patchSettingsWriteFailure();
-  patchThemeWriteConverge();
-  patchConfigEditorEditShortCircuit();
-  patchAppBootReconcileGate();
-  patchModelImageInputToggle();
-  patchOptionalEscalationFields();
-  patchAgentPresetMenu();
-  patchMenuSubmenuScroll();
-  patchClientModulesResolve();
+  // 退出码三态语义（审核定案）：
+  //   全部命中            → exit 0
+  //   锚点未命中（内核升级后的预期路径）→ exit 0 + 日志 + marker 缺失，
+  //     由 test/patch-anchor-regression.test.ts 的安装树绊网在测试期变红报警
+  //   意外崩溃（IO 错误 / 部分应用风险）→ exit 1，postinstall 硬失败
+  // 每个补丁独立 try/catch：单个崩溃不跳过其余补丁；任一崩溃则进程非零退出。
+  const patches: Array<[string, () => boolean]> = [
+    ['picker-worker', patchPickerWorker],
+    ['settings-nav-scroll', patchSettingsNavScroll],
+    ['settings-panel-resize', patchSettingsPanelResize],
+    ['settings-write-retry', patchSettingsWriteFailure],
+    ['theme-write-converge', patchThemeWriteConverge],
+    ['config-edit-skip', patchConfigEditorEditShortCircuit],
+    ['app-boot-reconcile-gate', patchAppBootReconcileGate],
+    ['model-image-input', patchModelImageInputToggle],
+    ['optional-escalation-fields', patchOptionalEscalationFields],
+    ['agent-preset-menu', patchAgentPresetMenu],
+    ['menu-submenu-scroll', patchMenuSubmenuScroll],
+    ['client-modules-resolve', patchClientModulesResolve],
+  ];
+  let crashed = 0;
+  for (const [name, run] of patches) {
+    try {
+      run();
+    } catch (error) {
+      crashed += 1;
+      console.log(`[patch-deps] ${name} 意外失败: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+  if (crashed > 0) process.exitCode = 1;
 }
 
 // 单测 require 本模块时不应改写真实 node_modules；仅命令行直接执行时跑 main()。
