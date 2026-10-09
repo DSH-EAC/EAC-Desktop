@@ -209,11 +209,20 @@ export function pluginCopyIsComplete(src: string, dest: string, stamp: string): 
     if (hit && hit.mtimeMs === mtimeMs && hit.stamp === stamp) return hit.complete;
     let complete = true;
     try {
-      const entries = new Set<string>();
-      walkCopySet(src, (rel) => entries.add(rel));
-      for (const rel of entries) {
+      // 完整性 = 存在 + 普通文件 + size 与源一致（捕获截断/就地改写类损坏；
+      // 源侧 size 由 walkCopySet 的 stat 顺带产出，无额外 IO）。
+      const entries = new Map<string, number>();
+      walkCopySet(src, (rel, st) => entries.set(rel, st.size));
+      for (const [rel, expectedSize] of entries) {
         const target = path.join(dest, rel);
-        if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
+        let st: fs.Stats;
+        try {
+          st = fs.statSync(target);
+        } catch {
+          complete = false;
+          break;
+        }
+        if (!st.isFile() || st.size !== expectedSize) {
           complete = false;
           break;
         }

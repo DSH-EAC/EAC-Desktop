@@ -9,7 +9,7 @@
   "scripts": {
     "ci:install": "node scripts/npm-ci-with-kernel.mjs",
     "fetch-node": "npm run build && node scripts/fetch-node.js",
-    "postinstall": "npm run build && node scripts/patch-deps.js || exit 0",
+    "postinstall": "npm run build && node scripts/patch-deps.js",
     "fetch-npm": "npm run build && node scripts/fetch-npm.js",
     "fetch-pnpm": "npm run build && node scripts/fetch-pnpm.js",
     "fetch-runtime": "npm run build && node scripts/fetch-node.js && node scripts/fetch-npm.js && node scripts/fetch-pnpm.js",
